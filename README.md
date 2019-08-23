@@ -10,7 +10,7 @@
 
 [`Introduction`](https://0nebean.github.io/Magnesium/)
 ---
-- 一言蔽之 (集数据中台，开放平台，API网关，user-auth，devops，SaaS租户账号下发于一体的企业级云管控平台)
+- Magnesium 通过两个核心的概念管理API，分别是应用（consumer）和服务（provider），API由服务提供，服务就是常规意义上的一个web server，我们把它其中的API定义到平台上进行可视化的管理，有了这些API加持，应用更像是一个应用市场的账号在海量的API市场里选择自己需要的API进行绑定获得授权，再直接通过该应用设定的授权方式即可直接访问这些API，那么实际意义上的产品，即对应了平台上一个应用的概念，只要接入了平台就等于获得了海量的数据API，并不关心提供方来自哪一个模块，哪一个数据库，用何种方式调用API，在此种模式下开发，API的复用率在得到最大化，开发成本将大幅度下降。
 
 
 - 框架特性[(查看明细)](https://github.com/0nebean/Magnesium/wiki/%E6%A1%86%E6%9E%B6%E7%89%B9%E6%80%A7)
