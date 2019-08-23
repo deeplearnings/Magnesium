@@ -10,7 +10,7 @@
 
 [`Introduction`](https://0nebean.github.io/Magnesium/)
 ---
-- Magnesium 是一个以管理API 为核心功能的数据中台，并拓展了多种API及用户鉴权模式以满 `但设备登录`，`开放平台`，`管理后台` 等业务场景接入数据中台的需求。
+- Magnesium 是一个以管理API 为核心功能的数据中台，并拓展了多种API及用户鉴权模式以满足 `移动端单设备登录`，`开放平台`，`管理后台` 等业务场景接入数据中台的需求。
 
 
 - 框架特性[(查看明细)](https://github.com/0nebean/Magnesium/wiki/%E6%A1%86%E6%9E%B6%E7%89%B9%E6%80%A7)
