@@ -12,8 +12,7 @@
 ![](https://img.shields.io/badge/middleware-redis-lightgrey.svg)  
 
 
-[`Introduction`](https://0nebean.github.io/Magnesium/)  
-
+Introduction
 ---
 - Magnesium 是一个以管理API 为核心功能的数据中台，并拓展了多种API及用户鉴权模式以满足多种业务场景接入数据中台的需求。
 
