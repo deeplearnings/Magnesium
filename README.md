@@ -4,18 +4,13 @@
 ![](https://img.shields.io/badge/belong_to-chemical--el-yellowgreen.svg)
 ![](https://img.shields.io/badge/support-onebean--data-red.svg)
 ![](https://img.shields.io/badge/dependency-spring--15.20-blue.svg)
-
 ![](https://img.shields.io/badge/middleware-mysql-lightgrey.svg)
-
 ![](https://img.shields.io/badge/middleware-apollo-lightgrey.svg)
-
 ![](https://img.shields.io/badge/middleware-eureka-lightgrey.svg)
-
 ![](https://img.shields.io/badge/middleware-rabbitMQ-lightgrey.svg)
-
 ![](https://img.shields.io/badge/middleware-redis-lightgrey.svg)
+[`Introduction`](https://0nebean.github.io/Magnesium/)  
 
-[`Introduction`](https://0nebean.github.io/Magnesium/)
 ---
 - Magnesium 是一个以管理API 为核心功能的数据中台，并拓展了多种API及用户鉴权模式以满足多种业务场景接入数据中台的需求。
 
