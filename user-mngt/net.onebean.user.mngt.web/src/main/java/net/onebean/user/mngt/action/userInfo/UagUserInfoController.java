@@ -8,6 +8,7 @@ import net.onebean.core.base.BasePaginationResponse;
 import net.onebean.core.query.Pagination;
 import net.onebean.core.extend.Sort;
 import net.onebean.uag.log.annotation.UagOperationLog;
+import net.onebean.user.mngt.api.model.ResetUserPasswordReq;
 import net.onebean.user.mngt.common.ErrorCodesEnum;
 import net.onebean.user.mngt.service.UagUserInfoService;
 import net.onebean.user.mngt.vo.*;
@@ -163,7 +164,7 @@ public class UagUserInfoController {
     @UagOperationLog(description = "重置账户密码")
     @SuppressWarnings("unchecked")
     @PostMapping(value = "restPassword",produces = {"application/json"},consumes = {"application/json"})
-    public BaseResponse<Boolean> restPassword(@RequestBody @Validated ToggleIsLockStatusReq request, BindingResult result) {
+    public BaseResponse<Boolean> restPassword(@RequestBody @Validated ResetUserPasswordReq request, BindingResult result) {
         logger.info("restPassword method access"+ DateUtils.getNowyyyy_MM_dd_HH_mm_ss());
         BaseResponse<Boolean> response = new BaseResponse<>();
         try {

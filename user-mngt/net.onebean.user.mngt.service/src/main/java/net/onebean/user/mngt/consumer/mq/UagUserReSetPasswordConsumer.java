@@ -5,7 +5,7 @@ import com.rabbitmq.client.Channel;
 import net.onebean.core.error.BusinessException;
 import net.onebean.user.mngt.common.ErrorCodesEnum;
 import net.onebean.user.mngt.service.UagUserInfoService;
-import net.onebean.user.mngt.vo.ToggleIsLockStatusReq;
+import net.onebean.user.mngt.api.model.ResetUserPasswordReq;
 import net.onebean.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,9 +31,9 @@ public class UagUserReSetPasswordConsumer {
     public void process(String text, Channel channel, Message message) {
         LOGGER.info("UagUserReSetPasswordConsumer ,text = "+text);
         try {
-            ToggleIsLockStatusReq req = JSON.parseObject(text, ToggleIsLockStatusReq.class);
-            String appId = Optional.of(req).map(ToggleIsLockStatusReq::getAppId).orElse("");
-            String uagUserId = Optional.of(req).map(ToggleIsLockStatusReq::getUserId).orElse("");
+            ResetUserPasswordReq req = JSON.parseObject(text, ResetUserPasswordReq.class);
+            String appId = Optional.of(req).map(ResetUserPasswordReq::getAppId).orElse("");
+            String uagUserId = Optional.of(req).map(ResetUserPasswordReq::getUserId).orElse("");
             if (StringUtils.isEmpty(appId) || StringUtils.isEmpty(uagUserId)){
                 throw new BusinessException(ErrorCodesEnum.RABBIT_MQ_BUSSINES_ERR.code(),ErrorCodesEnum.RABBIT_MQ_BUSSINES_ERR.msg()+" appId or uagUserId is empty");
             }

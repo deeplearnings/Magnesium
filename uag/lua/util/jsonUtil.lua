@@ -5,7 +5,7 @@
  	Date: 2019/01/16
 --]]
 local cjson = require("cjson.safe");
-cjson.encode_empty_table_as_object(false); 
+--cjson.encode_empty_table_as_object(false);
 
 local jsonUtil = {};
 

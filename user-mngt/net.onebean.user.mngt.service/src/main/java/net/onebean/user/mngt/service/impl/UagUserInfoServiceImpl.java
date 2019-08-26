@@ -15,6 +15,7 @@ import net.onebean.core.query.Pagination;
 import net.onebean.uag.conf.api.model.SendLoginSmsReq;
 import net.onebean.user.mngt.api.model.CheckUagLoginStatusReq;
 import net.onebean.user.mngt.api.model.CreateAccountMqReq;
+import net.onebean.user.mngt.api.model.ResetUserPasswordReq;
 import net.onebean.user.mngt.api.model.UagLoginInfo;
 import net.onebean.user.mngt.api.model.enumModel.PrivateTokenLoginFlagEnum;
 import net.onebean.user.mngt.common.CacheConstants;
@@ -156,7 +157,7 @@ public class UagUserInfoServiceImpl extends BaseSplitBizManual<UagUserInfo, UagU
             throw new BusinessException(ErrorCodesEnum.INSERT_DATA_ERROR.code(), ErrorCodesEnum.INSERT_DATA_ERROR.msg() + " param = " + JSON.toJSONString(param, SerializerFeature.WriteMapNullValue));
         }
         CreateAccountMqReq req = new CreateAccountMqReq(uagUserId.toString(), username);
-        createAccountFanOutSender.send(req);
+        createAccountFanOutSender.send(req,appId);
         return uagUserId;
     }
 
@@ -186,16 +187,22 @@ public class UagUserInfoServiceImpl extends BaseSplitBizManual<UagUserInfo, UagU
     }
 
     @Override
-    public Boolean restPassword(ToggleIsLockStatusReq param) {
-        String appId = Optional.ofNullable(param).map(ToggleIsLockStatusReq::getAppId).orElse("");
-        String userId = Optional.ofNullable(param).map(ToggleIsLockStatusReq::getUserId).orElse("");
+    public Boolean restPassword(ResetUserPasswordReq param) {
+        String appId = Optional.ofNullable(param).map(ResetUserPasswordReq::getAppId).orElse("");
+        String userId = Optional.ofNullable(param).map(ResetUserPasswordReq::getUserId).orElse("");
+        String password = Optional.ofNullable(param).map(ResetUserPasswordReq::getPassword).orElse("");
 
         UagUserInfo uagUserInfo = this.findById(userId, appId);
         if (StringUtils.isEmpty(uagUserInfo)) {
             throw new BusinessException(ErrorCodesEnum.NONE_QUERY_DATA.code(), ErrorCodesEnum.NONE_QUERY_DATA.msg() + " userId is invalid");
         }
 
-        String password = passwordEncoder.encode(DEFAULT_PASSWORD);
+        if (StringUtils.isEmpty(password)) {
+             password = passwordEncoder.encode(DEFAULT_PASSWORD);
+        }else{
+            password = passwordEncoder.encode(password);
+        }
+
         uagUserInfo.setPassword(password);
         UagSsoUtils.setUagUserInfoByHeader(uagUserInfo);
         this.save(uagUserInfo, appId);

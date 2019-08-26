@@ -5,6 +5,7 @@ import net.onebean.core.base.IBaseSplitBizManual;
 import net.onebean.core.extend.Sort;
 import net.onebean.core.query.Pagination;
 import net.onebean.user.mngt.api.model.CheckUagLoginStatusReq;
+import net.onebean.user.mngt.api.model.ResetUserPasswordReq;
 import net.onebean.user.mngt.api.model.UagLoginInfo;
 import net.onebean.user.mngt.model.UagUserInfo;
 import net.onebean.user.mngt.vo.*;
@@ -54,7 +55,7 @@ public interface UagUserInfoService extends IBaseSplitBizManual<UagUserInfo> {
      * @param request 参数
      * @return bool
      */
-    Boolean restPassword(ToggleIsLockStatusReq request);
+    Boolean restPassword(ResetUserPasswordReq request);
 
     /**
      * 短信验证码登录注册

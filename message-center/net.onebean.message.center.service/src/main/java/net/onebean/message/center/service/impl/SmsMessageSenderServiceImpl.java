@@ -20,6 +20,7 @@ public class SmsMessageSenderServiceImpl implements SmsMessageSenderService {
     @Override
     public Boolean sendSmsMsgByChannel1(SendSmsMsgReq req) {
         logger.info("请实现 sendSmsMsgByChannel1 发送方法");
+        pushedMessageRecordService.saveSendSmsCodeRecord(req);
         return true;
     }
 
@@ -27,6 +28,7 @@ public class SmsMessageSenderServiceImpl implements SmsMessageSenderService {
     @Override
     public Boolean sendSmsMsgByChannel2(SendSmsMsgReq req) {
         logger.info("请实现 sendSmsMsgByChannel2 发送方法");
+        pushedMessageRecordService.saveSendSmsCodeRecord(req);
         return true;
     }
 

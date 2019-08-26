@@ -246,15 +246,6 @@ local function checkAppIdStatus()
         comm.error4OpenApiWithCode("invalid appId",errorCodesEnum.invalid_appId);
     end
 
-    --[[如果是云应用 设置租户id到全局变量]]
-    if(appCategory == constants.OPENAPI_APP_CATEGORY_CLOUD)then
-        if (stringUtil.isBlank(tenantId)) then
-            ngx.log(ngx.DEBUG, "openAPI checkAppIdStatus tenantId is empty");
-            comm.error4OpenApiWithCode("invalid appId",errorCodesEnum.invalid_appId);
-        end
-        ngx.ctx.tenantId = tenantId;
-    end
-
     --[[authType 非空校验]]
     if (stringUtil.isBlank(authType)) then
         ngx.log(ngx.DEBUG, "openAPI checkAppIdStatus authType is empty");
@@ -501,7 +492,6 @@ end
 local function setUagReqHeader()
     local appid = ngx.ctx.appid;
     local accessToken = ngx.ctx.accessToken;
-    local tenantId = ngx.ctx.tenantId;
     local uagAuthUserId = ngx.ctx.uagAuthUserId;
     local customerId = ngx.ctx.customerId;
     local deviceToken = ngx.ctx.deviceToken;
@@ -526,19 +516,12 @@ local function setUagReqHeader()
     end
 
     --[[将 appid 设置到请求头部]]
-    webUtil.setReqHeader(constants.HEADER_APPID_KEY,appid);
-    ngx.log(ngx.INFO, "openAPI setUagReqHeader header[appId] is [appId = "..webUtil.getReqHeader(constants.HEADER_APPID_KEY).."]");
+    webUtil.setReqHeader(constants.HEADER_REQUEST_APP_ID_KEY,appid);
+    ngx.log(ngx.INFO, "openAPI setUagReqHeader header[appId] is [appId = "..webUtil.getReqHeader(constants.HEADER_REQUEST_APP_ID_KEY).."]");
 
     --[[将 accessToken 设置到请求头部]]
-    webUtil.setReqHeader(constants.HEADER_ACCESSTOKEN_KEY,accessToken);
-    ngx.log(ngx.INFO, "openAPI setUagReqHeader header[accessToken] is [accessToken = "..webUtil.getReqHeader(constants.HEADER_ACCESSTOKEN_KEY).."]");
-
-    if (stringUtil.isBlank(tenantId)) then
-        --[[将 tenantId 设置到请求头部]]
-        webUtil.setReqHeader(constants.HEADER_TENANT_ID_KEY,tenantId);
-        ngx.log(ngx.INFO, "openAPI setUagReqHeader header[tenantId] is [accessToken = "..webUtil.getReqHeader(constants.HEADER_TENANT_ID_KEY).."]");
-    end
-
+    webUtil.setReqHeader(constants.HEADER_REQUEST_ACCESSTOKEN_KEY,accessToken);
+    ngx.log(ngx.INFO, "openAPI setUagReqHeader header[accessToken] is [accessToken = "..webUtil.getReqHeader(constants.HEADER_REQUEST_ACCESSTOKEN_KEY).."]");
 end
 
 

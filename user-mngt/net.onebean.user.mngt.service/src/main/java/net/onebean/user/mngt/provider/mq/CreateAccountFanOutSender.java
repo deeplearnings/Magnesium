@@ -18,10 +18,10 @@ public class CreateAccountFanOutSender {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-    public void send(CreateAccountMqReq req) {
+    public void send(CreateAccountMqReq req,String appId) {
         String msgString = JSON.toJSONString(req, SerializerFeature.WriteMapNullValue);
         LOGGER.info("CreateAccountFanOutSender send msg = "+msgString);
-        this.rabbitTemplate.convertAndSend(MqExchangeNameEnum.UAG_CREATE_ACCOUNT_FANOUT_EXCHANGE.getName(),"", msgString);
+        this.rabbitTemplate.convertAndSend(MqExchangeNameEnum.UAG_CREATE_ACCOUNT_FANOUT_EXCHANGE.getName(),appId, msgString);
     }
 
 }

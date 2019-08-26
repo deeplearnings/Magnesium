@@ -82,15 +82,6 @@ local function checkAppIdStatus()
         returnFaileJson("invalid appId",errorCodesEnum.invalid_appId);
     end
 
-    --[[如果是云应用 设置租户id到全局变量]]
-    if(appCategory == constants.OPENAPI_APP_CATEGORY_CLOUD)then
-        if (stringUtil.isBlank(tenantId)) then
-            ngx.log(ngx.DEBUG, "openAPI checkAppIdStatus tenantId is empty");
-            returnFaileJson("invalid appId",errorCodesEnum.invalid_appId);
-        end
-        ngx.ctx.tenantId = tenantId;
-    end
-
     --[[authType 非空校验]]
     if (stringUtil.isBlank(authType)) then
         ngx.log(ngx.DEBUG, "openAPI checkAppIdStatus authType is empty");
