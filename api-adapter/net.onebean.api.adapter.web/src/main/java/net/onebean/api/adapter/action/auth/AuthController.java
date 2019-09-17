@@ -1,6 +1,7 @@
 package net.onebean.api.adapter.action.auth;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import net.onebean.api.adapter.common.ErrorCodesEnum;
 import net.onebean.api.adapter.service.AccessTokenService;
@@ -16,10 +17,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/auth")
@@ -83,5 +86,30 @@ public class AuthController {
     }
 
 
+
+
+    @GetMapping(value = "/getGua")
+    public void getGua(HttpServletRequest request) {
+        logger.info(" getGua method access" + DateUtils.getNowyyyy_MM_dd_HH_mm_ss());
+        Map map=request.getParameterMap();
+        Set keSet=map.entrySet();
+        logger.info(" getGua method access request = " + JSON.toJSONString(map, SerializerFeature.WriteMapNullValue));
+        for(Iterator itr = keSet.iterator(); itr.hasNext();){
+            Map.Entry me=(Map.Entry)itr.next();
+            Object ok=me.getKey();
+            Object ov=me.getValue();
+            String[] value=new String[1];
+            if(ov instanceof String[]){
+                value=(String[])ov;
+            }else{
+                value[0]=ov.toString();
+            }
+
+            for(int k=0;k<value.length;k++){
+                logger.info(ok+"="+value[k]);
+            }
+        }
+
+    }
 
 }

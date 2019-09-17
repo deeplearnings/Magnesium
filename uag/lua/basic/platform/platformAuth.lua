@@ -490,7 +490,7 @@ end
 
 
 local function setUagReqHeader()
-    local appid = ngx.ctx.appid;
+    local appId = ngx.ctx.appId;
     local accessToken = ngx.ctx.accessToken;
     local uagAuthUserId = ngx.ctx.uagAuthUserId;
     local customerId = ngx.ctx.customerId;
@@ -516,7 +516,7 @@ local function setUagReqHeader()
     end
 
     --[[将 appid 设置到请求头部]]
-    webUtil.setReqHeader(constants.HEADER_REQUEST_APP_ID_KEY,appid);
+    webUtil.setReqHeader(constants.HEADER_REQUEST_APP_ID_KEY,appId);
     ngx.log(ngx.INFO, "openAPI setUagReqHeader header[appId] is [appId = "..webUtil.getReqHeader(constants.HEADER_REQUEST_APP_ID_KEY).."]");
 
     --[[将 accessToken 设置到请求头部]]
