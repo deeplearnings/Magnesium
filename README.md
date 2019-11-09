@@ -4,7 +4,7 @@
 ![](https://img.shields.io/badge/belong_to-chemical--el-yellowgreen.svg)
 ![](https://img.shields.io/badge/support-onebean--data-red.svg)
 ![](https://img.shields.io/badge/dependency-spring--15.20-blue.svg)
-![](https://img.shields.io/badge/runing-on-Kubernetes-10.96.0.1-green.svg)  
+![](https://img.shields.io/badge/runing_on_Kubernetes-10.96.0.1-green.svg)  
 
 ![](https://img.shields.io/badge/middleware-mysql-lightgrey.svg)
 ![](https://img.shields.io/badge/middleware-apollo-lightgrey.svg)
