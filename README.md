@@ -21,7 +21,7 @@ Introduction
 - 框架特性
   - 基于[`Silicon`](https://0nebean.github.io/Silicon/)，[`VUE`](https://cn.vuejs.org/) 框架开发
   - 数据中台能力，以服务和应用的概念解耦项目和API之间的关联
-  - API网关能力，提供oauth授权码，单设备登陆，单点登陆等丰富的API鉴权模式，满足各种业务场景
+  - API网关能力，提供oauth授权码，单设备登陆，单点登陆等丰富的API鉴权模式，满足常见业务场景
   - 独立的user-auth体系，针对平台上接入的每个应用单独分表，提供独立却不臃肿的用户体系,省去重复开发
   - 基于Kubernetes的完整devops工具链，提供基于openresty的Kubernetes流量路由组件，一键部署，版本热切换
   - 图形化的nginx配置工具，配置域名和证书信息无需离开中台的页面
