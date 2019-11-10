@@ -1,10 +1,12 @@
 server {
 
-    server_name ${hostNode.serverHost};
+
     listen ${hostNode.listenPort};
 <#if hostNode.isSsl == '1'>
     listen ${hostNode.sslListenPort};
-    ssl on;
+</#if>
+    server_name ${hostNode.serverHost};
+<#if hostNode.isSsl == '1'>
     ssl_certificate ${hostNode.sslCrtPath};
     ssl_certificate_key ${hostNode.sslCrtKeyPath};
 </#if>
