@@ -13,7 +13,7 @@
 ![](https://img.shields.io/badge/middleware-redis-lightgrey.svg)  
 
 
-Introduction
+[Introduction](https://0nebean.github.io/Magnesium/)
 ---
 - Magnesium 是一个以管理API和devops工具链 为核心功能的数据中台。
 
