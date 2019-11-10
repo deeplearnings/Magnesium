@@ -1,17 +1,13 @@
 package net.onebean.server.mngt.vo;
 
-import net.onebean.core.model.BaseModel;
-import net.onebean.core.model.InterfaceBaseModel;
 import org.hibernate.validator.constraints.NotEmpty;
-
-import java.sql.Timestamp;
 
 /**
 * @author 0neBean
 * @description server info model
 * @date 2019-01-21 18:05:28
 */
-public class ServerInfoAddReq extends BaseModel implements InterfaceBaseModel {
+public class ServerInfoAddReq  {
 
 
         /**
@@ -28,8 +24,21 @@ public class ServerInfoAddReq extends BaseModel implements InterfaceBaseModel {
 
 
         /**
-        * 部署类型 0:物理地址部署 1:marathon部署
-        */
+         * 访问地址
+         */
+        @NotEmpty(message = "upsteamNodeName can not be empty")
+        private String upsteamNodeName;
+        public String getUpsteamNodeName() {
+            return upsteamNodeName;
+        }
+        public void setUpsteamNodeName(String upsteamNodeName) {
+            this.upsteamNodeName = upsteamNodeName;
+        }
+
+
+        /**
+         * 部署类型 0:物理地址部署 1:kubernetes部署
+         */
         @NotEmpty(message = "deployType can not be empty")
         private String deployType;
         public String getDeployType(){
@@ -41,14 +50,79 @@ public class ServerInfoAddReq extends BaseModel implements InterfaceBaseModel {
 
 
         /**
-         * 访问地址
+         * 选中版本
          */
-        private String hostPath;
-        @NotEmpty(message = "deployType can not be empty")
-        public String getHostPath(){
-            return this.hostPath;
+        private String selectedVersion;
+        public String getSelectedVersion(){
+            return this.selectedVersion;
         }
-        public void setHostPath(String hostPath){
-            this.hostPath = hostPath;
+        public void setSelectedVersion(String selectedVersion){
+            this.selectedVersion = selectedVersion;
+        }
+
+
+        /*是否是前端项目,0否1是*/
+        @NotEmpty(message = "isFront can not be empty")
+        private String isFront;
+        public String getIsFront() {
+            return isFront;
+        }
+        public void setIsFront(String isFront) {
+            this.isFront = isFront;
+        }
+
+        /*是否开启ssl*/
+        private String isSsl;
+        public String getIsSsl() {
+            return isSsl;
+        }
+        public void setIsSsl(String isSsl) {
+            this.isSsl = isSsl;
+        }
+
+        /*监听端口号*/
+        private String listenPort;
+        public String getListenPort() {
+            return listenPort;
+        }
+        public void setListenPort(String listenPort) {
+            this.listenPort = listenPort;
+        }
+
+        /*ssl监听端口号*/
+        private String sslListenPort;
+        public String getSslListenPort() {
+            return sslListenPort;
+        }
+        public void setSslListenPort(String sslListenPort) {
+            this.sslListenPort = sslListenPort;
+        }
+
+        /*域名*/
+        private String serverHost;
+        public String getServerHost() {
+            return serverHost;
+        }
+        public void setServerHost(String serverHost) {
+            this.serverHost = serverHost;
+        }
+
+
+        /*证书key路径*/
+        private String sslCrtKeyPath;
+        public String getSslCrtKeyPath() {
+            return sslCrtKeyPath;
+        }
+        public void setSslCrtKeyPath(String sslCrtKeyPath) {
+            this.sslCrtKeyPath = sslCrtKeyPath;
+        }
+
+        /*证书路径*/
+        private String sslCrtPath;
+        public String getSslCrtPath() {
+            return sslCrtPath;
+        }
+        public void setSslCrtPath(String sslCrtPath) {
+            this.sslCrtPath = sslCrtPath;
         }
 }

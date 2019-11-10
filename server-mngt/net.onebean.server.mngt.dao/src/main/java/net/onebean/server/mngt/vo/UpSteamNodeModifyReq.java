@@ -29,6 +29,54 @@ public class UpSteamNodeModifyReq {
 
 
     /**
+     * 节点命名空间
+     */
+    private String nodeNamespace;
+    public String getNodeNamespace(){
+        return this.nodeNamespace;
+    }
+    public void setNodeNamespace(String nodeNamespace){
+        this.nodeNamespace = nodeNamespace;
+    }
+
+
+    /**
+     * 选中版本
+     */
+    private String selectedVersion;
+    public String getSelectedVersion(){
+        return this.selectedVersion;
+    }
+    public void setSelectedVersion(String selectedVersion){
+        this.selectedVersion = selectedVersion;
+    }
+
+
+    /**
+     * 当前版本
+     */
+    private String currentVersion;
+    public String getCurrentVersion(){
+        return this.currentVersion;
+    }
+    public void setCurrentVersion(String currentVersion){
+        this.currentVersion = currentVersion;
+    }
+
+
+    /**
+     * 部署类型 0:物理地址部署 1:kubernetes部署
+     */
+    private String deployType;
+    public String getDeployType(){
+        return this.deployType;
+    }
+    public void setDeployType(String deployType){
+        this.deployType = deployType;
+    }
+
+
+    /**
      * 物理地址
      */
     private String physicalPath;
@@ -37,6 +85,18 @@ public class UpSteamNodeModifyReq {
     }
     public void setPhysicalPath(String physicalPath){
         this.physicalPath = physicalPath;
+    }
+
+
+    /**
+     * 运行状态，0运行中，1已停止
+     */
+    private String runningStatus;
+    public String getRunningStatus(){
+        return this.runningStatus;
+    }
+    public void setRunningStatus(String runningStatus){
+        this.runningStatus = runningStatus;
     }
 
 
@@ -86,4 +146,5 @@ public class UpSteamNodeModifyReq {
     public void setOperatorName(String operatorName){
         this.operatorName = operatorName;
     }
+
 }

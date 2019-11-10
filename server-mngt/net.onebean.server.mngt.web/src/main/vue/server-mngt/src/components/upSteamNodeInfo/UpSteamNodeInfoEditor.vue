@@ -28,29 +28,68 @@
 
           <FormItem label="服务节点名称"
             prop="nodeName">
-              <Select v-model="upSteamNodeInfoFrom.nodeName"
-                filterable
-                remote
-                :remote-method="queryUpSteamInfo"
-                placeholder="请搜索以选择服务节点"
-                :loading="isLoadingUpSteamNodeInfo">
-                <Option v-for="(option, index) in upSteamNodeInfo"
-                  :value="option.upsteamName"
-                  :key="index">{{option.upsteamName}}</Option>
-              </Select>
-              <upSteamName />
-            </FormItem>
+            <Select v-model="upSteamNodeInfoFrom.nodeName"
+              :disabled="showOnKubernetesDeployment()"
+              filterable
+              remote
+              :remote-method="queryUpSteamInfo"
+              placeholder="请搜索以选择服务节点"
+              :loading="isLoadingUpSteamNodeInfo">
+              <Option v-for="(option, index) in upSteamNodeInfo"
+                :value="option.upsteamName"
+                :key="index">{{option.upsteamName}}</Option>
+            </Select>
+            <upSteamName v-if="!showOnKubernetesDeployment()" />
+          </FormItem>
 
-            <FormItem label="物理地址"
-              prop="physicalPath">
-              <i-input v-model="upSteamNodeInfoFrom.physicalPath"
-                placeholder="请输入物理地址"></i-input>
-            </FormItem>
+          <FormItem label="节点命名空间"
+            v-if="showOnKubernetesDeployment()"
+            prop="nodeNamespace">
+            <i-input v-model="upSteamNodeInfoFrom.nodeNamespace"
+              disabled
+              placeholder="请输入命名空间"></i-input>
+          </FormItem>
 
-            <FormItem>
-              <Button type="primary"
-                @click="handleSubmit('upSteamNodeInfoFrom')">提交</Button>
-            </FormItem>
+          <FormItem label="	当前版本"
+            v-if="showOnKubernetesDeployment()"
+            prop="currentVersion">
+            <i-input v-model="upSteamNodeInfoFrom.currentVersion"
+              disabled
+              placeholder="请输入当前版本"></i-input>
+          </FormItem>
+
+          <FormItem label="选中版本"
+            v-if="showOnKubernetesDeployment()"
+            prop="selectedVersion">
+            <i-input v-model="upSteamNodeInfoFrom.selectedVersion"
+              disabled
+              placeholder="请输入选中版本"></i-input>
+          </FormItem>
+
+          <FormItem label="部署类型"
+            prop="deployType">
+            <Select v-model="upSteamNodeInfoFrom.deployType"
+              disabled
+              placeholder="选择部署类型">
+              <Option v-for="item in deployTypeEunmArr"
+                :value="item.value"
+                :disabled="item.disabled"
+                :key="item.value">{{ item.label }}</Option>
+            </Select>
+          </FormItem>
+
+          <FormItem label="物理地址"
+            prop="physicalPath">
+            <i-input v-model="upSteamNodeInfoFrom.physicalPath"
+              :disabled="showOnKubernetesDeployment()"
+              placeholder="请输入物理地址"></i-input>
+          </FormItem>
+
+          <FormItem>
+            <Button type="primary"
+              :disabled="globalButtonLoding"
+              @click="handleSubmit('upSteamNodeInfoFrom')">提交</Button>
+          </FormItem>
         </Form>
       </i-col>
     </Row>
@@ -68,6 +107,17 @@ export default {
   },
   data() {
     return {
+      deployTypeEunmArr: [
+        {
+          value: '0',
+          label: '物理地址部署'
+        },
+        {
+          value: '1',
+          label: 'kubernetes部署',
+          disabled: true
+        }
+      ],
       routerPath: this.$route.path,
       isLoadingUpSteamNodeInfo: false,
       upSteamNodeInfo: [],
@@ -107,13 +157,23 @@ export default {
   computed: {
     breadcrumbList: function() {
       return this.utils.routerUtil.initRouterTreeNameArr(this.routerPath)
+    },
+    globalScreenLoding: function() {
+      return this.$store.state.globalScreenLoding
+    },
+    globalButtonLoding: function() {
+      return this.$store.state.globalButtonLoding
     }
   },
   methods: {
+    showOnKubernetesDeployment() {
+      return this.upSteamNodeInfoFrom.deployType === '1' ? true : false
+    },
     queryUpSteamInfo(query) {
       if (query !== '') {
         this.isLoadingUpSteamNodeInfo = true
-        this.utils.netUtil.post(this.$store,
+        this.utils.netUtil.post(
+          this.$store,
           this.API_PTAH.upSteamNameFind,
           {
             data: {
@@ -148,7 +208,8 @@ export default {
       })
     },
     loadData() {
-      this.utils.netUtil.post(this.$store,
+      this.utils.netUtil.post(
+        this.$store,
         this.API_PTAH.upSteamNodeInfoFindById,
         this.upSteamNodeInfoFrom,
         response => {
@@ -157,13 +218,19 @@ export default {
       )
     },
     commitData() {
+      this.$store.commit('statusGlobalButtonLoding')
       this.upSteamNodeInfoFrom.id = this.$route.params.id
-      this.utils.netUtil.post(this.$store,
+      this.utils.netUtil.post(
+        this.$store,
         this.API_PTAH.upSteamNodeInfoUpdate,
         this.upSteamNodeInfoFrom,
         () => {
           this.$Message.success('提交成功!')
+          this.$store.commit('statusGlobalButtonLoding')
           this.$router.push('/upsteam-node-info-list')
+        },
+        () => {
+          this.$store.commit('statusGlobalButtonLoding')
         }
       )
     }

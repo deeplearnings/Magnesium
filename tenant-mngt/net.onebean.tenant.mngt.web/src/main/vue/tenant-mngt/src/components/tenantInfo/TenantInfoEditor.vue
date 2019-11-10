@@ -24,7 +24,7 @@
         <Form ref="tenantInfoFrom"
           :model="tenantInfoFrom"
           :rules="tenantInfoFromValidate"
-          :label-width="80">
+          :label-width="100">
           <FormItem label="登录邮箱"
             prop="email">
             <i-input v-model="tenantInfoFrom.email"
@@ -132,6 +132,7 @@
 
           <FormItem>
             <Button type="primary"
+              :disabled="globalButtonLoding"
               @click="handleSubmit('tenantInfoFrom')">提交</Button>
             <Button @click="handleReset('tenantInfoFrom')"
               style="margin-left: 8px">重置</Button>
@@ -145,7 +146,6 @@
 
 
 <script>
-
 export default {
   props: {
     query: { userId: 0 }
@@ -325,6 +325,12 @@ export default {
   computed: {
     breadcrumbList: function() {
       return this.utils.routerUtil.initRouterTreeNameArr(this.routerPath)
+    },
+    globalScreenLoding: function() {
+      return this.$store.state.globalScreenLoding
+    },
+    globalButtonLoding: function() {
+      return this.$store.state.globalButtonLoding
     }
   },
   methods: {
@@ -346,11 +352,16 @@ export default {
         apiPath = this.API_PTAH.cityInfoFindAllForCascader
       }
 
-      this.utils.netUtil.post(this.$store,apiPath, { provinceCode: item.value }, response => {
-        item.children = response.data.datas
-        item.loading = false
-        callback()
-      })
+      this.utils.netUtil.post(
+        this.$store,
+        apiPath,
+        { provinceCode: item.value },
+        response => {
+          item.children = response.data.datas
+          item.loading = false
+          callback()
+        }
+      )
     },
     handleSubmit(name) {
       this.$refs[name].validate(valid => {
@@ -362,23 +373,42 @@ export default {
       })
     },
     loadData() {
-      this.utils.netUtil.post(this.$store,this.API_PTAH.tenantInfoFindById, this.tenantInfoFrom, rep1 => {
-        this.tenantInfoFrom = rep1.data.datas
-        this.areaSelectorShowData.push(JSON.stringify(rep1.data.datas.provinceCode))
-        this.areaSelectorShowData.push(JSON.stringify(rep1.data.datas.cityCode))
-        this.tenantInfoFrom.cityCode = JSON.stringify(rep1.data.datas.cityCode)
-        this.tenantInfoFrom.provinceCode = JSON.stringify(rep1.data.datas.provinceCode)
-      })
+      this.utils.netUtil.post(
+        this.$store,
+        this.API_PTAH.tenantInfoFindById,
+        this.tenantInfoFrom,
+        rep1 => {
+          this.tenantInfoFrom = rep1.data.datas
+          this.areaSelectorShowData.push(
+            JSON.stringify(rep1.data.datas.provinceCode)
+          )
+          this.areaSelectorShowData.push(
+            JSON.stringify(rep1.data.datas.cityCode)
+          )
+          this.tenantInfoFrom.cityCode = JSON.stringify(
+            rep1.data.datas.cityCode
+          )
+          this.tenantInfoFrom.provinceCode = JSON.stringify(
+            rep1.data.datas.provinceCode
+          )
+        }
+      )
     },
     commitData() {
+      this.$store.commit('statusGlobalButtonLoding')
       this.tenantInfoFrom.id = this.$route.params.id
-      this.utils.netUtil.post(this.$store,
+      this.utils.netUtil.post(
+        this.$store,
         this.API_PTAH.tenantInfoUpdate,
         this.tenantInfoFrom,
         response => {
           response.data
           this.$Message.success('提交成功!')
+          this.$store.commit('statusGlobalButtonLoding')
           this.$router.push('/tenant-info-list')
+        },
+        () => {
+          this.$store.commit('statusGlobalButtonLoding')
         }
       )
     },

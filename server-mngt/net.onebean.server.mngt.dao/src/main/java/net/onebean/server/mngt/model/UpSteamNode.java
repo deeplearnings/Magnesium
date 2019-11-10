@@ -1,16 +1,17 @@
 package net.onebean.server.mngt.model;
-
 import net.onebean.core.extend.FiledName;
 import net.onebean.core.extend.TableName;
 import net.onebean.core.model.BaseModel;
+
 import net.onebean.core.model.InterfaceBaseDeletedModel;
+
 
 import java.sql.Timestamp;
 
 /**
 * @author 0neBean
-* @description upsteam node info model
-* @date 2019-03-01 15:25:32
+* @description 服务节点信息 model
+* @date 2019-11-01 16:51:06
 */
 @TableName("t_upsteam_node")
 public class UpSteamNode extends BaseModel implements InterfaceBaseDeletedModel {
@@ -21,7 +22,7 @@ public class UpSteamNode extends BaseModel implements InterfaceBaseDeletedModel 
         * 节点名称
         */
         private String nodeName;
-        @FiledName("nodeName")
+        @FiledName("node_name")
         public String getNodeName(){
             return this.nodeName;
         }
@@ -31,10 +32,62 @@ public class UpSteamNode extends BaseModel implements InterfaceBaseDeletedModel 
 
 
         /**
+        * 节点命名空间
+        */
+        private String nodeNamespace;
+        @FiledName("node_namespace")
+        public String getNodeNamespace(){
+            return this.nodeNamespace;
+        }
+        public void setNodeNamespace(String nodeNamespace){
+            this.nodeNamespace = nodeNamespace;
+        }
+
+
+        /**
+        * 选中版本
+        */
+        private String selectedVersion;
+        @FiledName("selected_version")
+        public String getSelectedVersion(){
+            return this.selectedVersion;
+        }
+        public void setSelectedVersion(String selectedVersion){
+            this.selectedVersion = selectedVersion;
+        }
+
+
+        /**
+        * 当前版本
+        */
+        private String currentVersion;
+        @FiledName("current_version")
+        public String getCurrentVersion(){
+            return this.currentVersion;
+        }
+        public void setCurrentVersion(String currentVersion){
+            this.currentVersion = currentVersion;
+        }
+
+
+        /**
+        * 部署类型 0:物理地址部署 1:kubernetes部署
+        */
+        private String deployType;
+        @FiledName("deploy_type")
+        public String getDeployType(){
+            return this.deployType;
+        }
+        public void setDeployType(String deployType){
+            this.deployType = deployType;
+        }
+
+
+        /**
         * 物理地址
         */
         private String physicalPath;
-        @FiledName("physicalPath")
+        @FiledName("physical_path")
         public String getPhysicalPath(){
             return this.physicalPath;
         }
@@ -44,10 +97,23 @@ public class UpSteamNode extends BaseModel implements InterfaceBaseDeletedModel 
 
 
         /**
+        * 运行状态，0运行中，1已停止
+        */
+        private String runningStatus;
+        @FiledName("running_status")
+        public String getRunningStatus(){
+            return this.runningStatus;
+        }
+        public void setRunningStatus(String runningStatus){
+            this.runningStatus = runningStatus;
+        }
+
+
+        /**
         * 创建时间
         */
         private Timestamp createTime;
-        @FiledName("createTime")
+        @FiledName("create_time")
         public Timestamp getCreateTime(){
             return this.createTime;
         }
@@ -60,7 +126,7 @@ public class UpSteamNode extends BaseModel implements InterfaceBaseDeletedModel 
         * 更新时间
         */
         private Timestamp updateTime;
-        @FiledName("updateTime")
+        @FiledName("update_time")
         public Timestamp getUpdateTime(){
             return this.updateTime;
         }
@@ -73,7 +139,7 @@ public class UpSteamNode extends BaseModel implements InterfaceBaseDeletedModel 
         * 操作人ID
         */
         private Integer operatorId;
-        @FiledName("operatorId")
+        @FiledName("operator_id")
         public Integer getOperatorId(){
             return this.operatorId;
         }
@@ -86,7 +152,7 @@ public class UpSteamNode extends BaseModel implements InterfaceBaseDeletedModel 
         * 操作人姓名
         */
         private String operatorName;
-        @FiledName("operatorName")
+        @FiledName("operator_name")
         public String getOperatorName(){
             return this.operatorName;
         }
@@ -99,11 +165,15 @@ public class UpSteamNode extends BaseModel implements InterfaceBaseDeletedModel 
         * 逻辑删除,0否1是
         */
         private String isDeleted;
-        @FiledName("isDeleted")
+        @FiledName("is_deleted")
         public String getIsDeleted(){
             return this.isDeleted;
         }
         public void setIsDeleted(String isDeleted){
             this.isDeleted = isDeleted;
         }
+
+
+
+
 }

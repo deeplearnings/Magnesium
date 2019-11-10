@@ -34,6 +34,17 @@
           </FormItem>
         </i-col>
 
+        <i-col span="2"
+          offset="1"
+          class="page-col">
+          <FormItem prop="operatorName">
+            <i-input type="text"
+              placeholder="操作人姓名"
+              v-model="paramData.data.operatorName">
+            </i-input>
+          </FormItem>
+        </i-col>
+
         <i-col span="3"
           offset="17"
           class="button-group">
@@ -76,7 +87,7 @@ export default {
       uagUserinfoAppArr: [],
       paramData: {
         data: {
-          operatorName: '',
+          operatorName: ''
         },
         page: {
           currentPage: 1,
@@ -91,7 +102,7 @@ export default {
         { title: '应用名称', key: 'appName' },
         { title: '操作项', key: 'operatorDescription' },
         { title: '操作时间', key: 'createTime' },
-        { title: '操作人', key: 'operatorName' },
+        { title: '操作人', key: 'operatorName' }
       ]
     }
   },
@@ -113,7 +124,8 @@ export default {
       this.getdata()
     },
     async getdata() {
-      this.utils.netUtil.post(this.$store,
+      this.utils.netUtil.post(
+        this.$store,
         this.API_PTAH.uagLogFind,
         this.paramData,
         response => {

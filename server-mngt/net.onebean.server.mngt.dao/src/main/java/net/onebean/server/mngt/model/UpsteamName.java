@@ -13,7 +13,7 @@ import java.sql.Timestamp;
 * @description upsteam name model
 * @date 2019-03-01 17:40:12
 */
-@TableName("t_upsteam")
+@TableName("t_upsteam_name")
 public class UpsteamName extends BaseModel implements InterfaceBaseDeletedModel {
 
 
@@ -41,6 +41,19 @@ public class UpsteamName extends BaseModel implements InterfaceBaseDeletedModel 
         }
         public void setCreateTime(Timestamp createTime){
             this.createTime = createTime;
+        }
+
+
+        /**
+         * 部署类型 0:物理地址部署 1:kubernetes部署
+         */
+        private String deployType;
+        @FiledName("deploy_type")
+        public String getDeployType(){
+            return this.deployType;
+        }
+        public void setDeployType(String deployType){
+            this.deployType = deployType;
         }
 
 

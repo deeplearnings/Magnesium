@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import net.onebean.core.base.BasePaginationRequest;
 import net.onebean.core.base.BasePaginationResponse;
+import net.onebean.core.base.BaseResponse;
 import net.onebean.core.error.BusinessException;
 import net.onebean.core.extend.Sort;
 import net.onebean.core.query.Pagination;
@@ -42,9 +43,9 @@ public class ProvinceController {
 
     @UagOperationLog(description = "添加省份信息")
     @PostMapping(value = "/add",produces = {"application/json"},consumes = {"application/json"})
-    public BasePaginationResponse add(@RequestBody @Validated AddTtenantProvinceReq  req, BindingResult result){
+    public BaseResponse add(@RequestBody @Validated AddTtenantProvinceReq  req, BindingResult result){
         logger.info("ProvinceController add method access "+ DateUtils.getNowyyyy_MM_dd_HH_mm_ss());
-        BasePaginationResponse response = new BasePaginationResponse();
+        BaseResponse response = new BaseResponse();
         try {
             if (result.hasErrors()) {
                 response.setErrCode(ErrorCodesEnum.REQUEST_PARAM_ERROR.code());
@@ -58,7 +59,7 @@ public class ProvinceController {
             logger.debug("ProvinceController add method target = "+ JSON.toJSONString(target, SerializerFeature.WriteMapNullValue));
             UagSsoUtils.setUagUserInfoByHeader(target);
             provinceService.save(target);
-            response = BasePaginationResponse.ok(target.getId());
+            response = BaseResponse.ok(target.getId());
         } catch (BusinessException e) {
             response.setErrCode(e.getCode());
             response.setErrMsg(e.getMsg());
@@ -115,9 +116,9 @@ public class ProvinceController {
 
     @UagOperationLog(description = "编辑省份信息")
     @PostMapping(value = "/update",produces = {"application/json"},consumes = {"application/json"})
-    public BasePaginationResponse update(@RequestBody @Validated ModifyTtenantProvinceReq req, BindingResult result){
+    public BaseResponse update(@RequestBody @Validated ModifyTtenantProvinceReq req, BindingResult result){
         logger.info("ProvinceController update method access "+ DateUtils.getNowyyyy_MM_dd_HH_mm_ss());
-        BasePaginationResponse response = new BasePaginationResponse();
+        BaseResponse response = new BaseResponse();
         try {
             if (result.hasErrors()) {
                 response.setErrCode(ErrorCodesEnum.REQUEST_PARAM_ERROR.code());
@@ -129,7 +130,7 @@ public class ProvinceController {
             BeanUtils.copyProperties(target,req);
             logger.debug("ProvinceController update method target = "+ JSON.toJSONString(target, SerializerFeature.WriteMapNullValue));
             UagSsoUtils.setUagUserInfoByHeader(target);
-            response = BasePaginationResponse.ok(provinceService.update(target));
+            response = BaseResponse.ok(provinceService.update(target));
         } catch (BusinessException e) {
             response.setErrCode(e.getCode());
             response.setErrMsg(e.getMsg());
@@ -145,9 +146,9 @@ public class ProvinceController {
 
     @UagOperationLog(description = "删除省份信息")
     @PostMapping(value = "/delete",produces = {"application/json"},consumes = {"application/json"})
-    public BasePaginationResponse delete(@RequestBody @Validated ModifyTtenantProvinceReq req, BindingResult result){
+    public BaseResponse delete(@RequestBody @Validated ModifyTtenantProvinceReq req, BindingResult result){
         logger.info("ProvinceController delete method access "+ DateUtils.getNowyyyy_MM_dd_HH_mm_ss());
-        BasePaginationResponse response = new BasePaginationResponse();
+        BaseResponse response = new BaseResponse();
         try {
             if (result.hasErrors()) {
                 response.setErrCode(ErrorCodesEnum.REQUEST_PARAM_ERROR.code());
@@ -156,7 +157,7 @@ public class ProvinceController {
             }
             logger.debug("ProvinceController delete method req = "+ JSON.toJSONString(req, SerializerFeature.WriteMapNullValue));
             String id = Optional.ofNullable(req).map(ModifyTtenantProvinceReq::getId).orElse(null);
-            response = BasePaginationResponse.ok(provinceService.deleteById(id));
+            response = BaseResponse.ok(provinceService.deleteById(id));
         } catch (BusinessException e) {
             response.setErrCode(e.getCode());
             response.setErrMsg(e.getMsg());
@@ -170,9 +171,9 @@ public class ProvinceController {
     }
 
     @PostMapping(value = "/findById",produces = {"application/json"},consumes = {"application/json"})
-    public BasePaginationResponse findById(@RequestBody @Validated ModifyTtenantProvinceReq req, BindingResult result){
+    public BaseResponse findById(@RequestBody @Validated ModifyTtenantProvinceReq req, BindingResult result){
         logger.info("ProvinceController findById method access "+ DateUtils.getNowyyyy_MM_dd_HH_mm_ss());
-        BasePaginationResponse response = new BasePaginationResponse();
+        BaseResponse response = new BaseResponse();
         try {
             if (result.hasErrors()) {
                 response.setErrCode(ErrorCodesEnum.REQUEST_PARAM_ERROR.code());
@@ -181,7 +182,7 @@ public class ProvinceController {
             }
             logger.debug("ProvinceController findById method req = "+ JSON.toJSONString(req, SerializerFeature.WriteMapNullValue));
             String id = Optional.ofNullable(req).map(ModifyTtenantProvinceReq::getId).orElse(null);
-            response = BasePaginationResponse.ok(provinceService.findVoById(id));
+            response = BaseResponse.ok(provinceService.findVoById(id));
         } catch (BusinessException e) {
             response.setErrCode(e.getCode());
             response.setErrMsg(e.getMsg());

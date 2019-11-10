@@ -1,7 +1,7 @@
 package net.onebean.mngt.portal.action.framework;
 
-import net.onebean.app.mngt.api.model.FindBasicMenuListResp;
-import net.onebean.app.mngt.api.service.AppInfoApi;
+import net.onebean.server.mngt.api.model.FindBasicMenuListResp;
+import net.onebean.server.mngt.api.service.AppInfoApi;
 import net.onebean.core.base.BasePaginationResponse;
 import net.onebean.core.base.BaseResponse;
 import net.onebean.core.error.BusinessException;

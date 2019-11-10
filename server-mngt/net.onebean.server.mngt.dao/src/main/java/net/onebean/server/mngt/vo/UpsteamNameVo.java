@@ -25,6 +25,18 @@ public class UpsteamNameVo {
 
 
     /**
+     * 部署类型 0:物理地址部署 1:kubernetes部署
+     */
+    private String deployType;
+    public String getDeployType(){
+        return this.deployType;
+    }
+    public void setDeployType(String deployType){
+        this.deployType = deployType;
+    }
+
+
+    /**
      * 创建时间
      */
     private Timestamp createTime;
@@ -70,5 +82,6 @@ public class UpsteamNameVo {
     public void setOperatorName(String operatorName){
         this.operatorName = operatorName;
     }
+
 
 }

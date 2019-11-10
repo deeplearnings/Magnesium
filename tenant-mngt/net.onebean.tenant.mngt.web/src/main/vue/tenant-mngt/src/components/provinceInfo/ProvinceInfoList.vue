@@ -25,21 +25,21 @@
         <i-col span="4"
           offset="1"
           class="page-col">
-          <FormItem prop="provinceName">
-            <i-input type="text"
-              placeholder="省份名称"
-              v-model="paramData.data.provinceName">
-            </i-input>
-          </FormItem>
-        </i-col>
-
-        <i-col span="4"
-          offset="1"
-          class="page-col">
           <FormItem prop="provinceCode">
             <i-input type="text"
               placeholder="省份编码"
               v-model="paramData.data.provinceCode">
+            </i-input>
+          </FormItem>
+        </i-col>
+
+        <i-col span="2"
+          offset="1"
+          class="page-col">
+          <FormItem prop="provinceName">
+            <i-input type="text"
+              placeholder="省份名称"
+              v-model="paramData.data.provinceName">
             </i-input>
           </FormItem>
         </i-col>
@@ -74,6 +74,7 @@
           @click="pushEditor(row.id)">编辑</Button>
         <Button type="error"
           size="small"
+          :disabled="globalButtonLoding"
           @click="deleteData(row.id ,index)">删除</Button>
       </template>
     </Table>
@@ -91,7 +92,8 @@
       </i-col>
     </Row>
     <cityInfoList :show-city-tab="showCityTab"
-      :provinceCode="editCityPCode" :provinceName="editCityPName"
+      :provinceCode="editCityPCode"
+      :provinceName="editCityPName"
       @on-close="closeCityEditTab" />
   </div>
 </template>
@@ -132,6 +134,12 @@ export default {
   computed: {
     breadcrumbList: function() {
       return this.utils.routerUtil.initRouterTreeNameArr(this.routerPath)
+    },
+    globalScreenLoding: function() {
+      return this.$store.state.globalScreenLoding
+    },
+    globalButtonLoding: function() {
+      return this.$store.state.globalButtonLoding
     }
   },
   mounted: function() {
@@ -150,7 +158,8 @@ export default {
       return this.utils.styleUtil.initTableListRowClass(index)
     },
     getdata() {
-      this.utils.netUtil.post(this.$store,
+      this.utils.netUtil.post(
+        this.$store,
         this.API_PTAH.provinceInfoFind,
         this.paramData,
         response => {
@@ -162,14 +171,29 @@ export default {
       )
     },
     deleteData(id, index) {
-      this.utils.netUtil.post(this.$store,
-        this.API_PTAH.provinceInfoDelete,
-        { id: id },
-        () => {
-          this.tableData.splice(index, 1)
-          this.$Message.success('删除成功!')
+      this.$store.commit('statusGlobalButtonLoding')
+      this.$Modal.confirm({
+        title: '警告',
+        content: '确认删除该条数据吗',
+        onOk: () => {
+          this.utils.netUtil.post(
+            this.$store,
+            this.API_PTAH.provinceInfoDelete,
+            { id: id },
+            () => {
+              this.$store.commit('statusGlobalButtonLoding')
+              this.tableData.splice(index, 1)
+              this.$Message.success('删除成功!')
+            },
+            () => {
+              this.$store.commit('statusGlobalButtonLoding')
+            }
+          )
+        },
+        onCancel: () => {
+          this.$store.commit('statusGlobalButtonLoding')
         }
-      )
+      })
     },
     handleReset() {
       this.$refs.queryParamFrom.resetFields()
@@ -183,7 +207,7 @@ export default {
         path: `${this.$route.path}/province-info-editor/${id}`
       })
     },
-    showCityEditTab(code,name) {
+    showCityEditTab(code, name) {
       this.editCityPCode = code
       this.editCityPName = name
       this.showCityTab = true

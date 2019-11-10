@@ -11,13 +11,13 @@
         and api.server_id = #{serverId} and api.is_deleted = '0'
     </select>
 
-    <select id="findApiByServerId" parameterType="string" resultType="net.onebean.server.mngt.api.model.ApiInfoCloudVo">
+    <select id="findApiByServerId" parameterType="string" resultType="net.onebean.server.mngt.vo.ApiInfoCloudVo">
         select
           api.server_id,api.api_status,api.api_uri,api.id as `key`,api.api_name as `label`,api.id
          from t_api_info api where api.server_id = #{serverId} and api.is_deleted = '0'
     </select>
 
-    <select id="findApiByAppId" parameterType="string" resultType="net.onebean.server.mngt.api.model.ApiInfoCloudVo">
+    <select id="findApiByAppId" parameterType="string" resultType="net.onebean.server.mngt.vo.ApiInfoCloudVo">
         select
           api.server_id,api.api_status,api.api_uri,api.id as `key`,api.api_name as `label`
          from t_api_info api
@@ -38,8 +38,7 @@
 
     <select id="findSyncUriApiRelationship" resultMap="uriApiRelationshipMap">
          select
-            s.host_path,
-            s.deploy_type,
+            s.upsteam_node_name,
             api.proxy_path,
             api.proxy_path as path,
             api.api_name,
@@ -54,21 +53,20 @@
         and api.is_deleted = '0'
     </select>
 
-    <resultMap id="uriApiRelationshipMap" type="net.onebean.server.mngt.api.model.UriApiRelationshipVo">
+    <resultMap id="uriApiRelationshipMap" type="net.onebean.server.mngt.vo.UriApiRelationshipVo">
         <result column="path" property="path"/>
-        <association property="apiInfo" column="api_uri" javaType="net.onebean.server.mngt.api.model.ApiInfoVo">
+        <association property="apiInfo" column="api_uri" javaType="net.onebean.server.mngt.vo.ApiInfoVo">
             <id column="id" property="id"/>
             <result column="api_name" property="apiName"/>
             <result column="proxy_path" property="proxyPath"/>
             <result column="api_uri" property="apiUri"/>
             <result column="api_status" property="apiStatus"/>
             <result column="server_id" property="serverId"/>
-            <result column="host_path" property="hostPath"/>
-            <result column="deploy_type" property="deployType"/>
+            <result column="upsteam_node_name" property="upsteamNodeName"/>
         </association>
     </resultMap>
 
-    <resultMap id="appApiRelationshipMap" type="net.onebean.server.mngt.api.model.AppApiRelationshipAppVo">
+    <resultMap id="appApiRelationshipMap" type="net.onebean.server.mngt.vo.AppApiRelationshipAppVo">
         <result column="open_id" property="openId"/>
         <collection property="apiIds" ofType="string" javaType="list">
             <result column="api_id" />

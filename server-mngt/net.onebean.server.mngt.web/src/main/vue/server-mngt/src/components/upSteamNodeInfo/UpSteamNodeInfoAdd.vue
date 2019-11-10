@@ -46,8 +46,20 @@
               placeholder="请输入物理地址"></i-input>
           </FormItem>
 
+          <FormItem label="部署类型"
+            prop="deployType">
+            <Select v-model="upSteamNodeInfoFrom.deployType"
+              placeholder="选择部署类型">
+              <Option v-for="item in deployTypeEunmArr"
+                :value="item.value"
+                :disabled="item.disabled"
+                :key="item.value">{{ item.label }}</Option>
+            </Select>
+          </FormItem>
+
           <FormItem>
             <Button type="primary"
+              :disabled="globalButtonLoding"
               @click="handleSubmit('upSteamNodeInfoFrom')">提交</Button>
             <Button @click="handleReset('upSteamNodeInfoFrom')"
               style="margin-left: 8px">重置</Button>
@@ -66,6 +78,17 @@ import upSteamName from '../upSteamName/upSteamName'
 export default {
   data() {
     return {
+      deployTypeEunmArr: [
+        {
+          value: '0',
+          label: '物理地址部署'
+        },
+        {
+          value: '1',
+          label: 'kubernetes部署',
+          disabled: true
+        }
+      ],
       routerPath: this.$route.path,
       isLoadingUpSteamNodeInfo: false,
       upSteamNodeInfo: [],
@@ -74,6 +97,13 @@ export default {
         physicalPath: ''
       },
       upSteamNodeInfoFromValidate: {
+        deployType: [
+          {
+            required: true,
+            message: '部署类型不能为空',
+            trigger: 'change'
+          }
+        ],
         nodeName: [
           {
             required: true,
@@ -101,13 +131,20 @@ export default {
   computed: {
     breadcrumbList: function() {
       return this.utils.routerUtil.initRouterTreeNameArr(this.routerPath)
+    },
+    globalScreenLoding: function() {
+      return this.$store.state.globalScreenLoding
+    },
+    globalButtonLoding: function() {
+      return this.$store.state.globalButtonLoding
     }
   },
   methods: {
     queryUpSteamInfo(query) {
       if (query !== '') {
         this.isLoadingUpSteamNodeInfo = true
-        this.utils.netUtil.post(this.$store,
+        this.utils.netUtil.post(
+          this.$store,
           this.API_PTAH.upSteamNameFind,
           {
             data: {
@@ -145,12 +182,18 @@ export default {
       this.$refs[name].resetFields()
     },
     commitData() {
-      this.utils.netUtil.post(this.$store,
+      this.$store.commit('statusGlobalButtonLoding')
+      this.utils.netUtil.post(
+        this.$store,
         this.API_PTAH.upSteamNodeInfoAdd,
         this.upSteamNodeInfoFrom,
         () => {
           this.$Message.success('提交成功!')
+          this.$store.commit('statusGlobalButtonLoding')
           this.$router.push('/upsteam-node-info-list')
+        },
+        () => {
+          this.$store.commit('statusGlobalButtonLoding')
         }
       )
     }

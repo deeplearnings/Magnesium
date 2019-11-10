@@ -49,7 +49,7 @@ export default {
         clearInterval(interval)
         this.$router.push('/')
       }
-    }, 1500)
+    })
   },
   methods: {}
 }

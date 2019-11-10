@@ -12,8 +12,7 @@
       <Divider />
       <Table :columns="columns"
         :data="listData">
-        <template slot-scope="{ row, index }"
-          slot="action">
+        <template slot-scope="{ row, index }" slot="action" v-if="showOnPhysicalDeployment(row.deployType)">
           <a @click="deleteData(row.id ,index)">删除</a>
         </template>
       </Table>
@@ -33,9 +32,9 @@
           <i-input placeholder="请输入应用名称"
             v-model="addDataParam.upsteamName"></i-input>
         </FormItem>
-        <br/>
-        <br/>
-        <br/>
+        <br />
+        <br />
+        <br />
         <FormItem>
           <Button type="primary"
             @click="handleSubmit('addDataParam')">提交</Button>
@@ -62,7 +61,8 @@ export default {
         }
       },
       addDataParam: {
-        upsteamName: ''
+        upsteamName: '',
+        deployType: '0'
       },
       validateRule: {
         upsteamName: [
@@ -70,7 +70,8 @@ export default {
             required: true,
             max: 30,
             pattern: /^[A-Za-z]+[A-Za-z-]*[A-Za-z]+$/,
-            message: '服务节点名称不能为空,最多30个字符,必须以英文开头和结尾只能包含中横线 [ - ]',
+            message:
+              '服务节点名称不能为空,最多30个字符,必须以英文开头和结尾只能包含中横线 [ - ]',
             trigger: 'blur'
           }
         ]
@@ -89,6 +90,9 @@ export default {
   },
   mounted: function() {},
   methods: {
+    showOnPhysicalDeployment(deployType) {
+      return deployType === '0' ? true : false
+    },
     handleSubmit(name) {
       this.$refs[name].validate(valid => {
         if (valid) {
@@ -105,7 +109,8 @@ export default {
       }
     },
     getDataList() {
-      this.utils.netUtil.post(this.$store,
+      this.utils.netUtil.post(
+        this.$store,
         this.API_PTAH.upSteamNameFind,
         this.paramData,
         response => {
@@ -118,20 +123,30 @@ export default {
         title: '警告',
         content: '确认删除该条数据吗',
         onOk: () => {
-          this.utils.netUtil.post(this.$store,this.API_PTAH.upSteamNameDelete, { id: id }, () => {
-            this.listData.splice(index, 1)
-            this.$Message.success('删除成功!')
-          })
+          this.utils.netUtil.post(
+            this.$store,
+            this.API_PTAH.upSteamNameDelete,
+            { id: id },
+            () => {
+              this.listData.splice(index, 1)
+              this.$Message.success('删除成功!')
+            }
+          )
         }
       })
     },
     commitData() {
-      this.utils.netUtil.post(this.$store,this.API_PTAH.upSteamNameAdd, this.addDataParam, () => {
-        this.addDataParam.upsteamName = ''
-        this.showAddFrom = false
-        this.$Message.success('提交成功!')
-        this.getDataList()
-      })
+      this.utils.netUtil.post(
+        this.$store,
+        this.API_PTAH.upSteamNameAdd,
+        this.addDataParam,
+        () => {
+          this.addDataParam.upsteamName = ''
+          this.showAddFrom = false
+          this.$Message.success('提交成功!')
+          this.getDataList()
+        }
+      )
     },
     onCloseAddView() {
       this.addDataParam.upsteamName = ''

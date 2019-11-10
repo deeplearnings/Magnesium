@@ -38,12 +38,18 @@ public class UagOperatorLogServiceImpl extends BaseBiz<UagOperatorLog, UagOperat
     @Override
     public List<UagLogVo> findUagLogInfo(FindUagLogReq param, Pagination page, Sort sort) {
         String operatorName = Optional.ofNullable(param).map(FindUagLogReq::getOperatorName).orElse("");
+        String appName = Optional.ofNullable(param).map(FindUagLogReq::getAppName).orElse("");
 
 
         List<Condition> paramList = new ArrayList<>();
         if (StringUtils.isNotEmpty(operatorName)) {
             Condition condition = Condition.parseModelCondition("operatorName@string@like");
             condition.setValue(operatorName);
+            paramList.add(condition);
+        }
+        if (StringUtils.isNotEmpty(appName)) {
+            Condition condition = Condition.parseModelCondition("appName@string@like");
+            condition.setValue(appName);
             paramList.add(condition);
         }
 

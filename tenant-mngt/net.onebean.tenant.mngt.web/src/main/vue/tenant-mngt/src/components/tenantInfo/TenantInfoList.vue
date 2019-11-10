@@ -33,7 +33,7 @@
           </FormItem>
         </i-col>
 
-        <i-col span="4"
+        <i-col span="2"
           offset="1"
           class="page-col">
           <FormItem prop="principal">
@@ -44,24 +44,24 @@
           </FormItem>
         </i-col>
 
-        <i-col span="4"
-          offset="1"
-          class="page-col">
-          <FormItem prop="mobile">
-            <i-input type="text"
-              placeholder="手机号码"
-              v-model="paramData.data.mobile">
-            </i-input>
-          </FormItem>
-        </i-col>
-
-        <i-col span="4"
+        <i-col span="2"
           offset="1"
           class="page-col">
           <FormItem prop="email">
             <i-input type="text"
               placeholder="登录邮箱"
               v-model="paramData.data.email">
+            </i-input>
+          </FormItem>
+        </i-col>
+
+        <i-col span="2"
+          offset="1"
+          class="page-col">
+          <FormItem prop="mobile">
+            <i-input type="text"
+              placeholder="手机号码"
+              v-model="paramData.data.mobile">
             </i-input>
           </FormItem>
         </i-col>
@@ -116,7 +116,9 @@
           class="pagination" />
       </i-col>
     </Row>
-
+    <Spin size="large"
+      fix
+      v-if="globalScreenLoding" />
   </div>
 </template>
 <script>
@@ -152,6 +154,12 @@ export default {
   computed: {
     breadcrumbList: function() {
       return this.utils.routerUtil.initRouterTreeNameArr(this.routerPath)
+    },
+    globalScreenLoding: function() {
+      return this.$store.state.globalScreenLoding
+    },
+    globalButtonLoding: function() {
+      return this.$store.state.globalButtonLoding
     }
   },
   mounted: function() {
@@ -166,22 +174,32 @@ export default {
       this.getdata()
     },
     tenantInfoInitAccount(id) {
-      this.utils.netUtil.post(this.$store,this.API_PTAH.tenantInfoInitAccount, { id: id }, () => {
-        this.$Message.success('初始化事件已成功发出!')
-        setTimeout(() => {
+      this.$store.commit('statusGlobalScreenLoding')
+      this.utils.netUtil.post(
+        this.$store,
+        this.API_PTAH.tenantInfoInitAccount,
+        { id: id },
+        () => {
+          this.$store.commit('statusGlobalScreenLoding')
+          this.$Message.success('初始化事件已成功发出!')
+          setTimeout(() => {
             this.getdata()
-        }, 2000)
-      })
+          }, 2000)
+        },
+        () => {
+          this.$store.commit('statusGlobalScreenLoding')
+        }
+      )
     },
     handlePageSize(value) {
       this.paramData.page.pageSize = value
-
     },
     rowClassName(row, index) {
       return this.utils.styleUtil.initTableListRowClass(index)
     },
     getdata() {
-      this.utils.netUtil.post(this.$store,
+      this.utils.netUtil.post(
+        this.$store,
         this.API_PTAH.tenantInfoFind,
         this.paramData,
         response => {
@@ -193,16 +211,31 @@ export default {
       )
     },
     deleteData(id, index) {
-      this.utils.netUtil.post(this.$store,this.API_PTAH.tenantInfoDelete, { id: id }, response => {
-        response.data
-        this.tableData.splice(index, 1)
-        this.$Message.success('删除成功!')
-      })
+      this.utils.netUtil.post(
+        this.$store,
+        this.API_PTAH.tenantInfoDelete,
+        { id: id },
+        response => {
+          response.data
+          this.tableData.splice(index, 1)
+          this.$Message.success('删除成功!')
+        }
+      )
     },
     syncData() {
-      this.utils.netUtil.post(this.$store,this.API_PTAH.tenantInfoSync, {}, () => {
-        this.$Message.success('同步数据已发送!')
-      })
+      this.$store.commit('statusGlobalScreenLoding')
+      this.utils.netUtil.post(
+        this.$store,
+        this.API_PTAH.tenantInfoSync,
+        {},
+        () => {
+          this.$store.commit('statusGlobalScreenLoding')
+          this.$Message.success('同步数据已发送!')
+        },
+        () => {
+          this.$store.commit('statusGlobalScreenLoding')
+        }
+      )
     },
     handleReset() {
       this.$refs.queryParamFrom.resetFields()

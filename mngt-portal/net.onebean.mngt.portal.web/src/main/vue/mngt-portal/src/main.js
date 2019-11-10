@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Layout from './components/layout/Layout.vue'
-import iView from 'iview'
-import 'iview/dist/styles/iview.css'
+import iView from 'view-design'
+import 'view-design/dist/styles/iview.css'
 import  './assets/css/bin/bin.css'
 import utils from './assets/js/utils/utils'
 import apiPath from './assets/js/constant/ApiPath'
@@ -19,13 +19,6 @@ Vue.prototype.API_PTAH = apiPath
 
 const router = routerConfig.initRouterGenerate
 const vuex = vuexConfig.initsStoreInstance
-
-
-router.beforeEach((to, from, next) => {
-  routerConfig.remoteRouterGenerate(router,vuex)
-  next()
-})
-
 
 
 new Vue({

@@ -165,7 +165,7 @@ export default {
   },
   methods: {
     initMenu: async function() {
-      this.menuList = this.utils.routerUtil.getMenuListFromLocalRouterConfig()
+      this.menuList =  await this.utils.routerUtil.getRemoteMenu(this.$router,this.$store)
       this.$nextTick(() => {
         this.$refs.side_menu.updateOpened()
         this.$refs.side_menu.updateActiveName()

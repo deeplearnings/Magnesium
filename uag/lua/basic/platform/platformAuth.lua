@@ -11,7 +11,6 @@ local redisUtil = require("util.redisUtil");
 local stringUtil = require("util.stringUtil");
 local jsonUtil = require("util.jsonUtil");
 local webUtil = require("util.webUtil");
-local tableUtil = require("util.tableUtil");
 local errorCodesEnum = require("comm.errorCodesEnum");
 
 
@@ -93,7 +92,10 @@ local function checkHybridTokenLoginStatus(accessTokenCasheJson,appId)
             comm.error4OpenApiWithCode("unlogin request",errorCodesEnum.unlogin_request);
         end
         --[[将 uagAuthUserId 设置到上下文]]
+        ngx.ctx.uagUsername = uagUsername;
         ngx.ctx.uagAuthUserId = uagUserId;
+        ngx.var.uagUsername = uagUsername;
+        ngx.var.uagAuthUserId = uagUserId;
     end
 
 end
@@ -107,6 +109,7 @@ local function checkAvoidLoginTokenCustomerId(accessTokenCasheJson,appId)
         comm.error4OpenApiWithCode("invalid accessToken",errorCodesEnum.invalid_accessToken);
     end
     ngx.ctx.customerId = customerIdCashe;
+    ngx.var.customerId = customerIdCashe;
 end
 
 --[[验证checkAccessToken的有效性]]
@@ -300,8 +303,8 @@ local function checkApipath()
     local apiStatus = stringUtil.toStringTrim(uriApiInfoJson["apiStatus"]);
     local apiId = stringUtil.toStringTrim(uriApiInfoJson["id"]);
     local realPath = stringUtil.toStringTrim(uriApiInfoJson["apiUri"]);
-    local hostPath = stringUtil.toStringTrim(uriApiInfoJson["hostPath"]);
-    local deployType = stringUtil.toStringTrim(uriApiInfoJson["deployType"]);
+    local upsteamNodeName = stringUtil.toStringTrim(uriApiInfoJson["upsteamNodeName"]);
+
 
     --[[appStatus 非空校验]]
     if (stringUtil.isBlank(apiStatus)) then
@@ -322,15 +325,9 @@ local function checkApipath()
     end
 
     --[[serverHost 非空校验]]
-    if (stringUtil.isBlank(hostPath)) then
-        ngx.log(ngx.DEBUG, "openAPI checkApipathAndStatus hostPath is empty");
+    if (stringUtil.isBlank(upsteamNodeName)) then
+        ngx.log(ngx.DEBUG, "openAPI checkApipathAndStatus upsteamNodeName is empty");
         comm.error4OpenApiWithCode("invalid api address",errorCodesEnum.invalid_api_address);
-    end
-
-    --[[deployType 非空校验]]
-    if (stringUtil.isBlank(deployType)) then
-        ngx.log(ngx.DEBUG, "openAPI checkApipathAndStatus deployType is empty");
-        comm.error4OpenApiWithCode("invalid api address",errorCodesEnum.invalid_api_address)
     end
 
     --[[检查API是否 is 可用状态]]
@@ -339,8 +336,8 @@ local function checkApipath()
         comm.error4OpenApiWithCode("invalid api address",errorCodesEnum.invalid_api_address);
     end
 
-    ngx.log(ngx.DEBUG, "openAPI checkApipathAndStatus apiId["..apiId.."], realPath["..realPath.."], hostPath["..hostPath.."],");
-    return apiId,realPath,hostPath,deployType
+    ngx.log(ngx.DEBUG, "openAPI checkApipathAndStatus apiId["..apiId.."], realPath["..realPath.."], upsteamNodeName["..upsteamNodeName.."],");
+    return apiId,realPath,upsteamNodeName
 end
 
 --[[检查app api 关联关系]]
@@ -402,11 +399,11 @@ local function setReqParam2ProxyPass(realPath)
 end
 
 --[[设置api的实际访问地址]]
-local function setApiAddressProxyPass(realPath,hostPath,deployType)
+local function setApiAddressProxyPass(realPath,upsteamNodeName)
     if (not stringUtil.startsWith(realPath, "/")) then
         realPath = "/" .. realPath;
     end
-    ngx.var.proxyPass = "http://" .. hostPath .. realPath;
+    ngx.var.proxyPass = "http://" .. upsteamNodeName .. realPath;
 end
 
 --[[记录访问信息]]
@@ -541,6 +538,7 @@ local accessToken = webUtil.getReqHeader(constants.HEADER_REQUEST_ACCESSTOKEN_KE
 --[[获取header[appId]]
 local appId = webUtil.getReqHeader(constants.HEADER_REQUEST_APP_ID_KEY);
 ngx.ctx.appId = appId;
+ngx.var.appId = appId
 --[[检查application 状态是否 is 可以访问状态]]
 local appInfoJson = checkAppIdStatus();
 
@@ -561,7 +559,7 @@ else
     checkIpWhtieListAndToken(appInfoJson);
 end
 --[[检查uri是否合法 返回apiId]]
-local apiId,realPath,hostPath,deployType = checkApipath();
+local apiId,realPath,upsteamNodeName = checkApipath();
 --[[通过appId获取对应绑定的apiIds]]
 local apiIds = getApiIdsByAppId();
 --[[检查当前uri 和 application 的关联关系]]
@@ -571,7 +569,7 @@ recordInformation(realPath);
 --[[将请求url上参数拼接到proxyPass]]
 realPath = setReqParam2ProxyPass(realPath);
 --[[设置uri的实际访问地址]]
-setApiAddressProxyPass(realPath,hostPath,deployType);
+setApiAddressProxyPass(realPath,upsteamNodeName);
 --[[设置uag校验后的头部信息]]
 setUagReqHeader();
 ngx.log(ngx.DEBUG, "proxypath info ["..ngx.var.proxyPass.."]");

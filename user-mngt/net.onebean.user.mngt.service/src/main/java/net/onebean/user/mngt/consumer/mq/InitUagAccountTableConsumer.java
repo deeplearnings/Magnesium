@@ -2,7 +2,7 @@ package net.onebean.user.mngt.consumer.mq;
 
 import com.alibaba.fastjson.JSON;
 import com.rabbitmq.client.Channel;
-import net.onebean.app.mngt.api.model.InitUagAccountTableConsumerReq;
+import net.onebean.server.mngt.api.model.InitUagAccountTableConsumerReq;
 import net.onebean.core.error.BusinessException;
 import net.onebean.user.mngt.common.ErrorCodesEnum;
 import net.onebean.user.mngt.service.UagUserInfoService;

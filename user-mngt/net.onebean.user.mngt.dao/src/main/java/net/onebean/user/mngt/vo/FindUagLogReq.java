@@ -14,5 +14,14 @@ public class FindUagLogReq {
         this.operatorName = operatorName;
     }
 
-
+    /**
+     * 项目名
+     */
+    private String appName;
+    public String getAppName() {
+        return appName;
+    }
+    public void setAppName(String appName) {
+        this.appName = appName;
+    }
 }

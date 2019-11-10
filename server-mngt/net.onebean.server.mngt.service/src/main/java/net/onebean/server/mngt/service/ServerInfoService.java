@@ -4,11 +4,8 @@ package net.onebean.server.mngt.service;
 import net.onebean.core.base.IBaseBiz;
 import net.onebean.core.query.Pagination;
 import net.onebean.core.extend.Sort;
-import net.onebean.server.mngt.api.model.FindServerByNameReq;
+import net.onebean.server.mngt.vo.*;
 import net.onebean.server.mngt.model.ServerInfo;
-import net.onebean.server.mngt.vo.ServerInfoAddReq;
-import net.onebean.server.mngt.vo.ServerInfoModifyReq;
-import net.onebean.server.mngt.vo.ServerInfoVo;
 
 import java.util.List;
 
@@ -38,17 +35,41 @@ public interface ServerInfoService extends IBaseBiz<ServerInfo> {
      * @return vo
      */
     ServerInfoVo findVoById(Object id);
-
-    /**
-     * 同步接口服务信息到缓存中
-     * 这里的同步工作都在app-mngt中完成 这里只发送mq消息
-     * @return bool
-     */
-    Boolean syncAppApiRelationship();
     /**
      * 删除服务信息
      * @param request 请求体
      * @return bool
      */
     Boolean deleteServerInfo(ServerInfoModifyReq request);
+    /**
+     * 保存服务信息
+     * @param request 服务信息
+     * @return bool
+     */
+    Boolean saveServerInfoAddReq(ServerInfoAddReq request);
+    /**
+     * 是否是重复的 server info
+     * @param upSteamNodeName 节点名称
+     * @param id 主键 可以为 null
+     * @return bool
+     */
+    Boolean isRepeatServerInfoByUpSteamNodeName(String upSteamNodeName,Long id);
+    /**
+     * 查询服务关联的节点IDs
+     * @param serverName 服务名
+     * @return 节点ids
+     */
+    List<String> findUpSteamNodeIdsByServerName(String serverName);
+    /**
+     * 更新
+     * @param request 参数
+     * @return bool
+     */
+    Boolean updateServerInfoModifyReq(ServerInfoModifyReq request);
+    /**
+     * 查找所有需要同步的域名配置节点
+     * @param upSteamNodeVos upSteamNodeVos
+     * @return list
+     */
+    List<ServerHostNodeVo> findSyncHostNode(List<UpSteamSyncNodeVo> upSteamNodeVos);
 }

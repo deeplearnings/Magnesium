@@ -15,13 +15,7 @@ constants.REDIS_SELECT = "redis_select";
 constants.REDIS_TIMEOUT = "redis_timeout";
 constants.REDIS_MAX_IDLE_TIME = "redis_max_idle_time";
 constants.REDIS_POOL_SIZE = "redis_pool_size";
-constants.IAP_URL = "iap_url";
-constants.IAP_DOMAIN_CONTEXT = "iap_domain_context";
-constants.USER_EXPIRE = "user_expire";
-constants.AUTH_EXPIRE = "auth_expire";
-constants.IGNORE_AUTH = "ignore_auth";
 constants.ALLOW_IPS = "allow_ips";
-constants.WEC_TOKEN = "wec_token";
 constants.MOBILE_USER_AGENT = "mobile_user_agent";
 constants.MYSQL_HOST = "mysql_host";
 constants.MYSQL_PORT = "mysql_port";
@@ -37,10 +31,10 @@ constants.MYSQL_PASSWORD = "mysql_password";
 
 
 -- config.json配置文件路径
-constants.configPath = "/usr/program/web/Magnesiumo/uag/conf/config.json";
+constants.configPath = "/usr/local/openresty/nginx/uag/conf/config.json";
 -- uag标识
 constants.UAG = "UAG";
-constants.UAG_HOST_ARRAY = "preuag.onebean.cn,uag.onebean.cn";
+constants.UAG_HOST_ARRAY = "preuag.onebean.net,uag.onebean.net";
 
 -- begin，openapi相关内容
 constants.OPENAPI_ACCESSTOKEN_KEY = constants.UAG .. ":OPENAPI:ACCESSTOKEN";

@@ -1,5 +1,7 @@
 let vuexState = {
-  uagCurrentLoginUserInfo: {}
+  globalButtonLoding:false,
+  globalScreenLoding:false,
+  uagCurrentLoginUserInfo:{},
 }
 
 export default vuexState

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { Message } from 'iview'
+import { Message } from 'view-design'
 
 let cancel,
   promiseArr = {}
@@ -10,7 +10,7 @@ axios.interceptors.request.use(
   config => {
     //发起请求时，取消掉当前正在进行的相同请求
     if (promiseArr[config.url]) {
-      promiseArr[config.url]('操作取消')
+      promiseArr[config.url]('cancel')
       promiseArr[config.url] = cancel
     } else {
       promiseArr[config.url] = cancel
@@ -70,9 +70,14 @@ axios.interceptors.response.use(
           err.message = `连接错误${err.response.status}`
       }
     } else {
-      err.message = '连接到服务器失败'
+      if (err.message != 'cancel') {
+        err.message = '连接到服务器失败'
+      }
+
     }
-    Message.error(err.message)
+    if (err.message != 'cancel') {
+      Message.error(err.message)
+    }
     return Promise.resolve(err.response)
   }
 )
@@ -87,16 +92,33 @@ axios.defaults.headers = {
 axios.defaults.timeout = 10000
 
 export default {
-  postAsync: async function(url, param) {
-     const resp = await axios({
+  postAsync: async function (url, param) {
+    const response = await axios({
       method: 'post',
       url,
-      data: param
+      data: param,
+      cancelToken: new CancelToken(c => {
+        cancel = c
+      })
     })
-    return resp.data.datas
+    if (typeof (response) == 'undefined') {
+      console.log('response is undefined,may be the request is cancelled')
+      return
+    }
+    if (response.data.errCode != '0') {
+      if (typeof (response.data.errCode) != 'undefined') {
+        Message.error(`请求失败 错误码 ${response.data.errCode} 错误信息: ${response.data.errMsg}`)
+      }
+    }
+    return response.data.datas
   },
-  post: function(url, param, callback) {
+  post: function (url, param, callback, errCallBack) {
+    const hedaer = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    }
     axios({
+      headers: hedaer,
       method: 'post',
       url,
       data: param,
@@ -104,22 +126,58 @@ export default {
         cancel = c
       })
     }).then(response => {
-      if(!response){
-        console.log(`err url = ${url}  response = ${JSON.stringify(response)}`)
+      if (typeof (response) == 'undefined') {
+        console.log('response is undefined,may be the request is cancelled')
+        return
       }
       if (response.data.errCode === '0') {
         callback(response)
       } else {
-        Message.error(
-          `请求失败 错误码 ${response.data.errCode} 错误信息: ${
-            response.data.errMsg
-          }`
-        )
+        if (typeof (response.data.errCode) != 'undefined') {
+          Message.error(`请求失败 错误码 ${response.data.errCode} 错误信息: ${response.data.errMsg}`)
+        }
+        if (typeof errCallBack != 'undefined') {
+          errCallBack(response)
+        }
       }
-    }).catch(function (error) {
-      Message.error(`请求失败 错误详情 = ${error}`)
+    })
+  }, postWithAccessToken: async function (
+    appId,
+    accessToken,
+    url,
+    param,
+    callback,
+    errCallBack
+  ) {
+    const hedaer = {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      appId: appId,
+      accessToken: accessToken
+    }
+    axios({
+      headers: hedaer,
+      method: 'post',
+      url,
+      data: param,
+      cancelToken: new CancelToken(c => {
+        cancel = c
+      })
+    }).then(response => {
+      if (typeof (response) == 'undefined') {
+        console.log('response is undefined,may be the request is cancelled')
+        return
+      }
+      if (response.data.errCode === '0') {
+        callback(response)
+      } else {
+        if (typeof (response.data.errCode) != 'undefined') {
+          Message.error(`请求失败 错误码 ${response.data.errCode} 错误信息: ${response.data.errMsg}`)
+        }
+        if (typeof errCallBack != 'undefined') {
+          errCallBack(response)
+        }
+      }
     })
   }
-
-
 }

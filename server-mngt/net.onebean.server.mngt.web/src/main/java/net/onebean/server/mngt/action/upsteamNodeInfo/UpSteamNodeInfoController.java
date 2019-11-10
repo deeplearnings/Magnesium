@@ -2,6 +2,7 @@ package net.onebean.server.mngt.action.upsteamNodeInfo;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import net.onebean.core.Json.EnableEnumDeserialize;
 import net.onebean.core.base.BasePaginationRequest;
 import net.onebean.core.base.BasePaginationResponse;
 import net.onebean.core.base.BaseResponse;
@@ -10,9 +11,7 @@ import net.onebean.core.extend.Sort;
 import net.onebean.core.query.Pagination;
 import net.onebean.server.mngt.common.ErrorCodesEnum;
 import net.onebean.server.mngt.service.UpSteamNodeService;
-import net.onebean.server.mngt.vo.UpSteamNodeAddReq;
-import net.onebean.server.mngt.vo.UpSteamNodeModifyReq;
-import net.onebean.server.mngt.vo.UpSteamNodeVo;
+import net.onebean.server.mngt.vo.*;
 import net.onebean.uag.log.annotation.UagOperationLog;
 import net.onebean.util.DateUtils;
 import org.slf4j.Logger;
@@ -64,6 +63,7 @@ public class UpSteamNodeInfoController {
 
     @SuppressWarnings("unchecked")
     @PostMapping(value = "/find",produces = {"application/json"},consumes = {"application/json"})
+    @EnableEnumDeserialize
     public BasePaginationResponse<UpSteamNodeVo> find(@RequestBody BasePaginationRequest<UpSteamNodeAddReq> request){
         logger.info("UpSteamNodeInfoController find method access"+ DateUtils.getNowyyyy_MM_dd_HH_mm_ss());
         BasePaginationResponse<UpSteamNodeVo> response = new BasePaginationResponse<>();
@@ -163,4 +163,79 @@ public class UpSteamNodeInfoController {
         return response;
     }
 
+
+    @SuppressWarnings("unchecked")
+    @PostMapping(value = "/findVersionListByNodeName",produces = {"application/json"},consumes = {"application/json"})
+    public BaseResponse<UpSteamVersionVo> findVersionListByNodeName(@RequestBody @Validated FindVersionListByNodeNameReq request, BindingResult result){
+        logger.info("findVersionListByNodeName method access"+ DateUtils.getNowyyyy_MM_dd_HH_mm_ss());
+        BaseResponse<UpSteamVersionVo> response = new BaseResponse<>();
+        try {
+            if (result.hasErrors()) {
+                response.setErrCode(ErrorCodesEnum.REQUEST_PARAM_ERROR.code());
+                response.setErrMsg(result.getAllErrors().get(0).getDefaultMessage());
+                return response;
+            }
+            logger.debug("findVersionListByNodeName method request = "+ JSON.toJSONString(request, SerializerFeature.WriteMapNullValue));
+            response = BaseResponse.ok(upSteamNodeService.findVersionListByNodeName(request));
+        } catch (BusinessException e) {
+            response.setErrCode(e.getCode());
+            response.setErrMsg(e.getMsg());
+            logger.info("findVersionListByNodeName method BusinessException ex = ", e);
+        } catch (Exception e) {
+            response.setErrCode(ErrorCodesEnum.OTHER.code());
+            response.setErrMsg(ErrorCodesEnum.OTHER.msg());
+            logger.error("findVersionListByNodeName method catch Exception e = ",e);
+        }
+        return response;
+    }
+
+    @SuppressWarnings("unchecked")
+    @PostMapping(value = "/setRunningStatusDownByDevOpsK8sNotificationVo",produces = {"application/json"},consumes = {"application/json"})
+    public BaseResponse<UpSteamVersionVo> setRunningStatusDownByDevOpsK8sNotificationVo(@RequestBody @Validated SetRunningStatusDown request, BindingResult result){
+        logger.info("setRunningStatusDownByDevOpsK8sNotificationVo method access"+ DateUtils.getNowyyyy_MM_dd_HH_mm_ss());
+        BaseResponse<UpSteamVersionVo> response = new BaseResponse<>();
+        try {
+            if (result.hasErrors()) {
+                response.setErrCode(ErrorCodesEnum.REQUEST_PARAM_ERROR.code());
+                response.setErrMsg(result.getAllErrors().get(0).getDefaultMessage());
+                return response;
+            }
+            logger.debug("setRunningStatusDownByDevOpsK8sNotificationVo method request = "+ JSON.toJSONString(request, SerializerFeature.WriteMapNullValue));
+            response = BaseResponse.ok(upSteamNodeService.setRunningStatusDownByDevOpsK8sNotificationVo(request));
+        } catch (BusinessException e) {
+            response.setErrCode(e.getCode());
+            response.setErrMsg(e.getMsg());
+            logger.info("setRunningStatusDownByDevOpsK8sNotificationVo method BusinessException ex = ", e);
+        } catch (Exception e) {
+            response.setErrCode(ErrorCodesEnum.OTHER.code());
+            response.setErrMsg(ErrorCodesEnum.OTHER.msg());
+            logger.error("setRunningStatusDownByDevOpsK8sNotificationVo method catch Exception e = ",e);
+        }
+        return response;
+    }
+
+    @SuppressWarnings("unchecked")
+    @PostMapping(value = "/updateSelectedVersion",produces = {"application/json"},consumes = {"application/json"})
+    public BaseResponse<Boolean> updateSelectedVersion(@RequestBody @Validated UpdateSelectedVersionReq request, BindingResult result){
+        logger.info("updateSelectedVersion method access"+ DateUtils.getNowyyyy_MM_dd_HH_mm_ss());
+        BaseResponse<Boolean> response = new BaseResponse<>();
+        try {
+            if (result.hasErrors()) {
+                response.setErrCode(ErrorCodesEnum.REQUEST_PARAM_ERROR.code());
+                response.setErrMsg(result.getAllErrors().get(0).getDefaultMessage());
+                return response;
+            }
+            logger.debug("updateSelectedVersion method request = "+ JSON.toJSONString(request, SerializerFeature.WriteMapNullValue));
+            response = BaseResponse.ok(upSteamNodeService.updateSelectedVersion(request));
+        } catch (BusinessException e) {
+            response.setErrCode(e.getCode());
+            response.setErrMsg(e.getMsg());
+            logger.info("updateSelectedVersion method BusinessException ex = ", e);
+        } catch (Exception e) {
+            response.setErrCode(ErrorCodesEnum.OTHER.code());
+            response.setErrMsg(ErrorCodesEnum.OTHER.msg());
+            logger.error("updateSelectedVersion method catch Exception e = ",e);
+        }
+        return response;
+    }
 }

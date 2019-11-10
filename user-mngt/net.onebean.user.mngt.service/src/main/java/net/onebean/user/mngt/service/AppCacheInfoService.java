@@ -1,7 +1,7 @@
 package net.onebean.user.mngt.service;
 
 import com.alibaba.fastjson.JSON;
-import net.onebean.app.mngt.api.model.AppInfoSyncVo;
+import net.onebean.server.mngt.api.model.AppInfoSyncVo;
 import net.onebean.component.redis.IRedisService;
 import net.onebean.core.error.BusinessException;
 import net.onebean.user.mngt.common.CacheConstants;

@@ -44,6 +44,7 @@
 
           <FormItem>
             <Button type="primary"
+              :disabled="globalButtonLoding"
               @click="handleSubmit('provinceInfoFrom')">提交</Button>
             <Button @click="handleReset('provinceInfoFrom')"
               style="margin-left: 8px">重置</Button>
@@ -99,6 +100,12 @@ export default {
   computed: {
     breadcrumbList: function() {
       return this.utils.routerUtil.initRouterTreeNameArr(this.routerPath)
+    },
+    globalScreenLoding: function() {
+      return this.$store.state.globalScreenLoding
+    },
+    globalButtonLoding: function() {
+      return this.$store.state.globalButtonLoding
     }
   },
   methods: {
@@ -115,13 +122,17 @@ export default {
       this.$refs[name].resetFields()
     },
     commitData() {
-      this.utils.netUtil.post(this.$store,
+      this.$store.commit('statusGlobalButtonLoding')
+      this.utils.netUtil.post(
+        this.$store,
         this.API_PTAH.provinceInfoAdd,
         this.provinceInfoFrom,
-        response => {
-          response.data
+        () => {
+          this.$store.commit('statusGlobalButtonLoding')
           this.$Message.success('提交成功!')
           this.$router.push('/province-info-list')
+        },() => {
+          this.$store.commit('statusGlobalButtonLoding')
         }
       )
     }

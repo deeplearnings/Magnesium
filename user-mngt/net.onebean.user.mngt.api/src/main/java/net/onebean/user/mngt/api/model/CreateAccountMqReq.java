@@ -6,9 +6,9 @@ public class CreateAccountMqReq {
     public CreateAccountMqReq() {
     }
 
-    public CreateAccountMqReq(String uagUserId, String uagUsername) {
+    public CreateAccountMqReq(String uagUserId, String uagUserName) {
         this.uagUserId = uagUserId;
-        this.uagUsername = uagUsername;
+        this.uagUsername = uagUserName;
     }
 
     private String uagUserId;

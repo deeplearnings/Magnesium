@@ -21,7 +21,10 @@
     <Row>
       <i-col span="12"
         offset="6">
-        <Form ref="provinceInfoFrom" :model="provinceInfoFrom" :rules="provinceInfoFromValidate" :label-width="80">
+        <Form ref="provinceInfoFrom"
+          :model="provinceInfoFrom"
+          :rules="provinceInfoFromValidate"
+          :label-width="80">
           <FormItem label="省份名称"
             prop="provinceName">
             <i-input v-model="provinceInfoFrom.provinceName"
@@ -42,6 +45,7 @@
 
           <FormItem>
             <Button type="primary"
+              :disabled="globalButtonLoding"
               @click="commitData()">提交</Button>
           </FormItem>
         </Form>
@@ -53,7 +57,6 @@
 
 
 <script>
-
 export default {
   props: {
     query: { userId: 0 }
@@ -62,12 +65,12 @@ export default {
     return {
       routerPath: this.$route.path,
       provinceInfoFrom: {
-          id: this.$route.params.id,
-          createTime: '',
-          updateTime: '',
-          operatorName: '',
-          appName: '',
-          appCategory: ''
+        id: this.$route.params.id,
+        createTime: '',
+        updateTime: '',
+        operatorName: '',
+        appName: '',
+        appCategory: ''
       },
       provinceInfoFromValidate: {
         provinceName: [
@@ -103,6 +106,12 @@ export default {
   computed: {
     breadcrumbList: function() {
       return this.utils.routerUtil.initRouterTreeNameArr(this.routerPath)
+    },
+    globalScreenLoding: function() {
+      return this.$store.state.globalScreenLoding
+    },
+    globalButtonLoding: function() {
+      return this.$store.state.globalButtonLoding
     }
   },
   methods: {
@@ -116,21 +125,28 @@ export default {
       })
     },
     loadData() {
-      this.utils.netUtil.post(this.$store,
-        this.API_PTAH.provinceInfoFindById,this.provinceInfoFrom,
-        response => { 
+      this.utils.netUtil.post(
+        this.$store,
+        this.API_PTAH.provinceInfoFindById,
+        this.provinceInfoFrom,
+        response => {
           this.provinceInfoFrom = response.data.datas
         }
       )
     },
     commitData() {
+      this.$store.commit('statusGlobalButtonLoding')
       this.provinceInfoFrom.id = this.$route.params.id
-      this.utils.netUtil.post(this.$store,
-        this.API_PTAH.provinceInfoUpdate,this.provinceInfoFrom,
-        response => { 
-          response.data
+      this.utils.netUtil.post(
+        this.$store,
+        this.API_PTAH.provinceInfoUpdate,
+        this.provinceInfoFrom,
+        () => {
+          this.$store.commit('statusGlobalButtonLoding')
           this.$Message.success('提交成功!')
           this.$router.push('/province-info-list')
+        },() => {
+          this.$store.commit('statusGlobalButtonLoding')
         }
       )
     }

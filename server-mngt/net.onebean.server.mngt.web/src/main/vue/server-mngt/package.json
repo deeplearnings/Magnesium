@@ -1,6 +1,9 @@
 {
   "name": "server-mngt",
   "version": "0.1.0",
+  "publishConfig": {
+    "registry": "https://nexus.onebean.net:8089/repository/onebean-npm-hosted/"
+  },
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -9,7 +12,8 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
-    "iview": "^3.2.2",
+    "onebean-utils": "^0.1.0",
+    "view-design": "^4.0.2",
     "vue": "^2.5.21",
     "vue-router": "^3.0.2",
     "vuex": "^3.1.1"

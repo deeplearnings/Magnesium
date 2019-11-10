@@ -1,14 +1,13 @@
 package net.onebean.server.mngt.service;
 
 
+import net.onebean.api.adapter.api.model.DevOpsK8sNotificationVo;
 import net.onebean.core.base.IBaseBiz;
 import net.onebean.core.query.Pagination;
 import net.onebean.core.extend.Sort;
-import net.onebean.server.mngt.api.model.UpSteamSyncNodeVo;
+import net.onebean.server.mngt.vo.UpSteamSyncNodeVo;
 import net.onebean.server.mngt.model.UpSteamNode;
-import net.onebean.server.mngt.vo.UpSteamNodeAddReq;
-import net.onebean.server.mngt.vo.UpSteamNodeModifyReq;
-import net.onebean.server.mngt.vo.UpSteamNodeVo;
+import net.onebean.server.mngt.vo.*;
 
 import java.util.List;
 
@@ -20,8 +19,19 @@ import java.util.List;
 */
 
 public interface UpSteamNodeService extends IBaseBiz<UpSteamNode> {
+    /**
+     * 查询vo
+     * @param param 参数
+     * @param page 分页
+     * @param sort 排序
+     * @return list
+     */
     List<UpSteamNodeVo> findUpSteamNodeVo(UpSteamNodeAddReq param, Pagination page, Sort sort);
-
+    /**
+     * find By Id
+     * @param id 主键
+     * @return vo
+     */
     UpSteamNodeVo findVoById(Object id);
     /**
      * 新增
@@ -46,4 +56,46 @@ public interface UpSteamNodeService extends IBaseBiz<UpSteamNode> {
      * @return list
      */
     List<UpSteamSyncNodeVo> findSyncNode();
+    /**
+     * 根据node名称查询可用版本号
+     * @param request 参数
+     * @return list
+     */
+    List<UpSteamVersionVo> findVersionListByNodeName(FindVersionListByNodeNameReq request);
+    /**
+     * 更新服务的选中版本
+     * @param req 参数
+     * @return bool
+     */
+    Boolean updateSelectedVersion(UpdateSelectedVersionReq req);
+    /**
+     * 检查参数
+     * @param json 参数
+     * @return vo
+     */
+    DevOpsK8sNotificationVo getDevOpsK8sNotificationVoFromJsontext(String json);
+    /**
+     * 添加节点信息
+     * @param vo 参数
+     * @return bool
+     */
+    Boolean addByDevOpsK8sNotificationVo(DevOpsK8sNotificationVo vo);
+    /**
+     * 删除节点信息
+     * @param orig 参数
+     * @return bool
+     */
+    Boolean setRunningStatusDownByDevOpsK8sNotificationVo(SetRunningStatusDown orig);
+    /**
+     * 是否重复的 k8s 推送
+     * @param param 参数
+     * @return bool
+     */
+    Boolean isRepeatByDevOpsK8sNotificationVo(DevOpsK8sNotificationVo param);
+    /**
+     * 停止警告 禁止被切换小于5分钟内的节点被关闭
+     * @param id 主键
+     * @return bool
+     */
+    void stopWarning(String id);
 }

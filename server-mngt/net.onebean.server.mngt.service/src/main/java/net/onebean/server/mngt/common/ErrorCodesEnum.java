@@ -25,15 +25,36 @@ public enum ErrorCodesEnum {
     //02
     NONE_QUERY_DATA("1102020001","没有对应的数据"),
     GET_DATE_ERR("1102020002","数据库查询数据异常"),
+    INSERT_DATA_ERROR("1102020003","插入数据失败"),
+    DIRTY_DATA_ERR("1102020004","脏数据异常"),
+    REPEAT_DATA_ERR("1102020005","已有重复的数据"),
+    //03
+    PUT_CACHE_ERR("1202030001","插入redis数据失败"),
+    GET_REDIS_LOCK_ERR("1202030002","获取分布式锁失败"),
+    //05
+    CLOUD_API_ERROR("1102050001","远程调用接口失败"),
+    READ_APOLLO_ERROR("1202050002","读取配置失败"),
+    JSCH_ERROR("1202050003","读取服务器配置失败"),
     //06
     DATA_REPEAT_ERR("1102060001","已有重复的数据"),
     DATA_BINDING_ERR("1102060002","数据被引用,无法删除,请先解除关联"),
     REPEART_PROXY_PATH_ERR("1102060003","已有重复的代理地址"),
+    SPRING_CLOUD_ERR("1102060004","微服务调用异常"),
+    DEPRECATED_LESS_FIVE("1102060005","该节点弃用不足5分钟，不允许停用！"),
+    NO_DATA_TO_SYNC("1102060006","没有获取到需要同步的数据"),
+    READ_APOLLO_EMPTY_VALUE("1202060007","从配置中心获取的值为空"),
+    UPDATE_NGINX_SAFE_ROLL_BACK_ERROR("1202060008","更新UAG失败,已回滚,请人工介入"),
+    UPDATE_NGINX_UN_ROLL_BACK_ERROR("1202060009","更新UAG失败,执行回滚操作失败,请立即人工介入,很紧急"),
     //07
     JSON_CAST_ERROR("1102070001","序列化JSON异常"),
     REF_ERROR("1102070002","反射对象属性异常"),
+    IO_ERROR("1202070003","读写文件异常"),
+    VALUE_CAN_NOT_BE_EMPTY_ERR("1202070004","获取值为空异常"),
+    INVALID_OPERATION_LINUX_PATH("1202070005","操作linux的路径中不能包含'*'的危险操作"),
+    //08
+    RABBIT_MQ_BUSSINES_ERR("1202070001","mq业务处理异常"),
     //99
-    OTHER("1102999999","操作失败")
+    OTHER("1102999999","操作失败"),
     ;
 
     private String code;

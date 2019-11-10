@@ -5,8 +5,8 @@ import net.onebean.core.base.BaseSplitBizManual;
 import net.onebean.core.error.BusinessException;
 import net.onebean.message.center.api.model.SendSmsMsgReq;
 import net.onebean.message.center.common.ErrorCodesEnum;
-import net.onebean.message.center.common.MsgTypeEnum;
 import net.onebean.message.center.dao.PushedMessageRecordDao;
+import net.onebean.message.center.enumModel.MsgTypeEnum;
 import net.onebean.message.center.model.PushedMessageRecord;
 import net.onebean.message.center.service.PushedMessageRecordService;
 import net.onebean.util.FreeMarkerTemplateUtils;
@@ -49,7 +49,7 @@ public class PushedMessageRecordServiceImpl extends BaseSplitBizManual<PushedMes
         }
         PushedMessageRecord msgCodeRecord = new PushedMessageRecord();
         msgCodeRecord.setMessageBody(messageBody);
-        msgCodeRecord.setMessageType(MsgTypeEnum.MSG_TYPE_MSG.code());
+        msgCodeRecord.setMessageType(MsgTypeEnum.MSG_TYPE_SMS_CODE.code());
         msgCodeRecord.setReceiverAccount(telPhone);
         this.save(msgCodeRecord,appId);
         return true;

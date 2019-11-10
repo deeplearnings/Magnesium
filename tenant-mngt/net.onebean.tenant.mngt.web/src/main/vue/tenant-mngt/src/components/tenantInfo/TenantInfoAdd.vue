@@ -19,7 +19,7 @@
         <Form ref="tenantInfoFrom"
           :model="tenantInfoFrom"
           :rules="tenantInfoFromValidate"
-          :label-width="80">
+          :label-width="100">
           <FormItem label="登录邮箱"
             prop="email">
             <i-input v-model="tenantInfoFrom.email"
@@ -118,13 +118,15 @@
             <Select v-model="tenantInfoFrom.status"
               placeholder="选择应用类型   ">
               <Option v-for="item in tenantInfoStatusEunmArr"
-                :value="item.value" :disabled="item.disabled"
+                :value="item.value"
+                :disabled="item.disabled"
                 :key="item.value">{{ item.label }}</Option>
             </Select>
           </FormItem>
 
           <FormItem>
             <Button type="primary"
+              :disabled="globalButtonLoding"
               @click="handleSubmit('tenantInfoFrom')">提交</Button>
             <Button @click="handleReset('tenantInfoFrom')"
               style="margin-left: 8px">重置</Button>
@@ -319,6 +321,12 @@ export default {
   computed: {
     breadcrumbList: function() {
       return this.utils.routerUtil.initRouterTreeNameArr(this.routerPath)
+    },
+    globalScreenLoding: function() {
+      return this.$store.state.globalScreenLoding
+    },
+    globalButtonLoding: function() {
+      return this.$store.state.globalButtonLoding
     }
   },
   methods: {
@@ -333,11 +341,16 @@ export default {
         apiPath = this.API_PTAH.cityInfoFindAllForCascader
       }
 
-      this.utils.netUtil.post(this.$store,apiPath, { provinceCode: item.value }, response => {
-        item.children = response.data.datas
-        item.loading = false
-        callback()
-      })
+      this.utils.netUtil.post(
+        this.$store,
+        apiPath,
+        { provinceCode: item.value },
+        response => {
+          item.children = response.data.datas
+          item.loading = false
+          callback()
+        }
+      )
     },
     handleSubmit(name) {
       this.$refs[name].validate(valid => {
@@ -352,13 +365,19 @@ export default {
       this.$refs[name].resetFields()
     },
     commitData() {
-      this.utils.netUtil.post(this.$store,
+      this.$store.commit('statusGlobalButtonLoding')
+      this.utils.netUtil.post(
+        this.$store,
         this.API_PTAH.tenantInfoAdd,
         this.tenantInfoFrom,
         response => {
           response.data
           this.$Message.success('提交成功!')
+          this.$store.commit('statusGlobalButtonLoding')
           this.$router.push('/tenant-info-list')
+        },
+        () => {
+          this.$store.commit('statusGlobalButtonLoding')
         }
       )
     },

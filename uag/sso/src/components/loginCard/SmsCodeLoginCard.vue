@@ -63,6 +63,7 @@
           <FormItem>
             <Button type="success"
               long
+              :disabled="globalLoginLoding"
               @click="handleSubmit('smsLoginFrom')">短信验证码登录</Button>
           </FormItem>
         </Form>
@@ -114,6 +115,11 @@ export default {
   mounted: function() {
     this.checkSsoParam()
   },
+  computed: {
+    globalLoginLoding: function() {
+      return this.$store.state.globalLoginLoding
+    }
+  },
   methods: {
     sendSmsCode() {
       const pattern = /^[0-9]{11}$/
@@ -139,12 +145,13 @@ export default {
       if (
         typeof this.uagAppId === 'undefined' ||
         typeof this.uagAccessToken === 'undefined' ||
-        typeof this.uagDeviceToken === 'undefined' 
+        typeof this.uagDeviceToken === 'undefined'
       ) {
         this.$router.push('/err')
       }
     },
     doLogin: function() {
+      this.$store.commit('statusGlobalLoginLoding')
       this.utils.netUtil.postWithAccessToken(
         this.uagAppId,
         this.uagAccessToken,
@@ -154,11 +161,15 @@ export default {
           smsCode: this.smsLoginFrom.smsCode
         },
         resp => {
+          this.$store.commit('statusGlobalLoginLoding')
           if (resp.data.datas.loginStatus === '1') {
             let oauthBaseUrl = resp.data.datas.oauthBaseUrl
             oauthBaseUrl = `${oauthBaseUrl}?uagDeviceToken=${this.uagDeviceToken}`
             window.location.href = oauthBaseUrl
           }
+        },
+        () => {
+          this.$store.commit('statusGlobalLoginLoding')
         }
       )
     },

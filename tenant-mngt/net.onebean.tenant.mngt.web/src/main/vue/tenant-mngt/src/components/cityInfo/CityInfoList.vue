@@ -13,7 +13,12 @@
         :data="listData">
         <template slot-scope="{ row, index }"
           slot="action">
-          <a @click="deleteData(row.id ,index)">删除</a>
+          <Button type="error"
+            size="small"
+            @click="deleteData(row.id ,index)"
+            :disabled="globalButtonLoding"
+            style="margin-left: 8px">删除</Button>
+          <!-- <a  :disabled="globalButtonLoding">删除</a> -->
         </template>
       </Table>
     </Drawer>
@@ -41,6 +46,7 @@
 
         <FormItem>
           <Button type="primary"
+            :disabled="globalButtonLoding"
             @click="handleSubmit('addDataParam')">提交</Button>
         </FormItem>
       </Form>
@@ -51,12 +57,12 @@
 
 <script>
 export default {
-  props: ['showCityTab', 'provinceCode','provinceName'],
+  props: ['showCityTab', 'provinceCode', 'provinceName'],
   data() {
     return {
       paramData: {
         data: {
-          provinceCode: this.provinceCode,
+          provinceCode: this.provinceCode
         },
         page: {
           currentPage: 1,
@@ -68,10 +74,10 @@ export default {
         }
       },
       addDataParam: {
-          provinceCode: this.provinceCode,
-          level: 1,
-          citySort: '',
-          cityName: ''
+        provinceCode: this.provinceCode,
+        level: 1,
+        citySort: '',
+        cityName: ''
       },
       validateRule: {
         cityName: [
@@ -113,6 +119,17 @@ export default {
       this.showDataListState = this.showCityTab
     }
   },
+  computed: {
+    breadcrumbList: function() {
+      return this.utils.routerUtil.initRouterTreeNameArr(this.routerPath)
+    },
+    globalScreenLoding: function() {
+      return this.$store.state.globalScreenLoding
+    },
+    globalButtonLoding: function() {
+      return this.$store.state.globalButtonLoding
+    }
+  },
   mounted: function() {
     this.getDataList()
   },
@@ -128,31 +145,56 @@ export default {
     },
     getDataList() {
       this.paramData.data.provinceCode = this.provinceCode
-      this.utils.netUtil.post(this.$store,this.API_PTAH.cityInfoFind, this.paramData, response => {
-        this.listData = response.data.datas
-      })
+      this.utils.netUtil.post(
+        this.$store,
+        this.API_PTAH.cityInfoFind,
+        this.paramData,
+        response => {
+          this.listData = response.data.datas
+        }
+      )
     },
     deleteData(id, index) {
+      this.$store.commit('statusGlobalButtonLoding')
       this.$Modal.confirm({
         title: '警告',
         content: '确认删除该条数据吗',
         onOk: () => {
-          this.utils.netUtil.post(this.$store,this.API_PTAH.cityInfoDelete, { id: id }, () => {
-            this.listData.splice(index, 1)
-            this.$Message.success('删除成功!')
-          })
+          this.utils.netUtil.post(
+            this.$store,
+            this.API_PTAH.cityInfoDelete,
+            { id: id },
+            () => {
+              this.$store.commit('statusGlobalButtonLoding')
+              this.listData.splice(index, 1)
+              this.$Message.success('删除成功!')
+            }
+          )
+        },
+        onCancel: () => {
+          this.$store.commit('statusGlobalButtonLoding')
         }
       })
     },
     commitData() {
+      this.$store.commit('statusGlobalButtonLoding')
       this.addDataParam.provinceCode = this.provinceCode
-      this.utils.netUtil.post(this.$store,this.API_PTAH.cityInfoAdd, this.addDataParam, () => {
-        this.addDataParam.ipAddress = ''
-        this.showAddFrom = false
-        this.$Message.success('提交成功!')
-        this.getDataList()
-        this.onCloseAddView()
-      })
+      this.utils.netUtil.post(
+        this.$store,
+        this.API_PTAH.cityInfoAdd,
+        this.addDataParam,
+        () => {
+          this.$store.commit('statusGlobalButtonLoding')
+          this.addDataParam.ipAddress = ''
+          this.showAddFrom = false
+          this.$Message.success('提交成功!')
+          this.getDataList()
+          this.onCloseAddView()
+        },
+        () => {
+          this.$store.commit('statusGlobalButtonLoding')
+        }
+      )
     },
     onCloseAddView() {
       this.addDataParam.citySort = ''

@@ -26,7 +26,7 @@
 
         <dependency>
             <groupId>net.onebean</groupId>
-            <artifactId>net.onebean.app.mngt.api</artifactId>
+            <artifactId>net.onebean.server.mngt.api</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
 

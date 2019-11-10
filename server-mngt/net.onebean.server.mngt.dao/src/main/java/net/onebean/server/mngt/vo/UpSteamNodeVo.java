@@ -1,5 +1,9 @@
 package net.onebean.server.mngt.vo;
 
+import net.onebean.core.Json.EnumDeserialize;
+import net.onebean.server.mngt.enumModel.DeployTypeEnum;
+import net.onebean.server.mngt.enumModel.RunningStatusEnum;
+
 import java.sql.Timestamp;
 
 /**
@@ -18,9 +22,10 @@ public class UpSteamNodeVo {
         }
 
 
+
         /**
-        * 节点名称
-        */
+         * 节点名称
+         */
         private String nodeName;
         public String getNodeName(){
             return this.nodeName;
@@ -31,8 +36,57 @@ public class UpSteamNodeVo {
 
 
         /**
-        * 物理地址
-        */
+         * 节点命名空间
+         */
+        private String nodeNamespace;
+        public String getNodeNamespace(){
+            return this.nodeNamespace;
+        }
+        public void setNodeNamespace(String nodeNamespace){
+            this.nodeNamespace = nodeNamespace;
+        }
+
+
+        /**
+         * 选中版本
+         */
+        private String selectedVersion;
+        public String getSelectedVersion(){
+            return this.selectedVersion;
+        }
+        public void setSelectedVersion(String selectedVersion){
+            this.selectedVersion = selectedVersion;
+        }
+
+
+        /**
+         * 当前版本
+         */
+        private String currentVersion;
+        public String getCurrentVersion(){
+            return this.currentVersion;
+        }
+        public void setCurrentVersion(String currentVersion){
+            this.currentVersion = currentVersion;
+        }
+
+
+        /**
+         * 部署类型 0:物理地址部署 1:kubernetes部署
+         */
+        @EnumDeserialize(using = DeployTypeEnum.class)
+        private String deployType;
+        public String getDeployType(){
+            return this.deployType;
+        }
+        public void setDeployType(String deployType){
+            this.deployType = deployType;
+        }
+
+
+        /**
+         * 物理地址
+         */
         private String physicalPath;
         public String getPhysicalPath(){
             return this.physicalPath;
@@ -43,8 +97,32 @@ public class UpSteamNodeVo {
 
 
         /**
-        * 创建时间
-        */
+         * 运行状态，0运行中，1已停止
+         */
+        @EnumDeserialize(using = RunningStatusEnum.class)
+        private String runningStatus;
+        public String getRunningStatus(){
+            return this.runningStatus;
+        }
+        public void setRunningStatus(String runningStatus){
+            this.runningStatus = runningStatus;
+        }
+
+
+        /**
+         * 是否可以停止 0否1是
+         */
+        private String canStop;
+        public String getCanStop() {
+            return canStop;
+        }
+        public void setCanStop(String canStop) {
+            this.canStop = canStop;
+        }
+
+        /**
+             * 创建时间
+             */
         private Timestamp createTime;
         public Timestamp getCreateTime(){
             return this.createTime;
@@ -55,8 +133,8 @@ public class UpSteamNodeVo {
 
 
         /**
-        * 更新时间
-        */
+         * 更新时间
+         */
         private Timestamp updateTime;
         public Timestamp getUpdateTime(){
             return this.updateTime;
@@ -67,8 +145,8 @@ public class UpSteamNodeVo {
 
 
         /**
-        * 操作人ID
-        */
+         * 操作人ID
+         */
         private Integer operatorId;
         public Integer getOperatorId(){
             return this.operatorId;
@@ -79,8 +157,8 @@ public class UpSteamNodeVo {
 
 
         /**
-        * 操作人姓名
-        */
+         * 操作人姓名
+         */
         private String operatorName;
         public String getOperatorName(){
             return this.operatorName;
@@ -90,4 +168,12 @@ public class UpSteamNodeVo {
         }
 
 
+        /* 单元格样式 */
+        private UpSteamNodeCellClassNameVo cellClassName;
+        public UpSteamNodeCellClassNameVo getCellClassName() {
+            return cellClassName;
+        }
+        public void setCellClassName(UpSteamNodeCellClassNameVo cellClassName) {
+            this.cellClassName = cellClassName;
+        }
 }

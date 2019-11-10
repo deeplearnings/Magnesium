@@ -2,9 +2,9 @@ package net.onebean.server.mngt.enumModel;
 
 public enum  DeployTypeEnum {
 
-    //app分类 0:物理地址部署 1:marathon部署
+    //部署类型 0:物理地址部署 1:kubernetes部署
     PHYSICAL("0", "物理地址部署"),
-    MARATHON("1", "marathon部署"),
+    KUBERNETES("1", "kubernetes部署"),
             ;
 
     DeployTypeEnum() {

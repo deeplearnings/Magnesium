@@ -198,6 +198,7 @@ local accessToken = webUtil.getReqHeader(constants.HEADER_REQUEST_ACCESSTOKEN_KE
 --[[获取header[appId]]
 local appId = webUtil.getReqHeader(constants.HEADER_REQUEST_APP_ID_KEY);
 ngx.ctx.appId = appId;
+ngx.var.appId = appId;
 --[[检查application 状态是否 is 可以访问状态]]
 checkAppIdStatus();
 --[[检查accessToken合法性]]

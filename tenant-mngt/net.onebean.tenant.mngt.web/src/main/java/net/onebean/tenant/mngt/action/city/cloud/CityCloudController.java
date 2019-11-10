@@ -2,12 +2,12 @@ package net.onebean.tenant.mngt.action.city.cloud;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import net.onebean.core.base.BaseResponse;
 import net.onebean.core.error.BusinessException;
-import net.onebean.core.base.BasePaginationResponse;
-import net.onebean.tenant.mngt.common.ErrorCodesEnum;
-import net.onebean.tenant.mngt.service.TtenantCityService;
 import net.onebean.tenant.mngt.api.model.FIndListTenantCityResp;
 import net.onebean.tenant.mngt.api.model.FIndTenantCityByNameReq;
+import net.onebean.tenant.mngt.common.ErrorCodesEnum;
+import net.onebean.tenant.mngt.service.TtenantCityService;
 import net.onebean.util.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,9 +30,9 @@ public class CityCloudController {
 
     @SuppressWarnings("unchecked")
     @PostMapping(value = "/findCityByName",produces = {"application/json"},consumes = {"application/json"})
-    public BasePaginationResponse<FIndListTenantCityResp> findCityVoByName(@RequestBody @Validated FIndTenantCityByNameReq req, BindingResult result){
+    public BaseResponse<FIndListTenantCityResp> findCityVoByName(@RequestBody @Validated FIndTenantCityByNameReq req, BindingResult result){
         logger.info("CityController findListByProvinceCode method access "+ DateUtils.getNowyyyy_MM_dd_HH_mm_ss());
-        BasePaginationResponse<FIndListTenantCityResp> response = new BasePaginationResponse<>();
+        BaseResponse<FIndListTenantCityResp> response = new BaseResponse<>();
         try {
             if (result.hasErrors()) {
                 response.setErrCode(ErrorCodesEnum.REQUEST_PARAM_ERROR.code());
@@ -40,7 +40,7 @@ public class CityCloudController {
                 return response;
             }
             logger.debug("CityController findListByProvinceCode method req = "+ JSON.toJSONString(req, SerializerFeature.WriteMapNullValue));
-            response = BasePaginationResponse.ok(ttenantCityService.findCityVoByName(req));
+            response = BaseResponse.ok(ttenantCityService.findCityVoByName(req));
         } catch (BusinessException e) {
             response.setErrCode(e.getCode());
             response.setErrMsg(e.getMsg());

@@ -18,6 +18,19 @@ public class UpsteamNameAddReq {
     }
 
 
+    /**
+     * 部署类型 0:物理地址部署 1:kubernetes部署
+     */
+    @NotEmpty(message = "deployType can not be empty")
+    private String deployType;
+    public String getDeployType(){
+        return this.deployType;
+    }
+    public void setDeployType(String deployType){
+        this.deployType = deployType;
+    }
+
+
 
     private Integer operatorId;
     public Integer getOperatorId(){

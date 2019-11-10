@@ -76,15 +76,18 @@
         <Button type="warning"
           size="small"
           style="margin-right: 5px"
+          :disabled="globalButtonLoding"
           @click="resetPassword(row)">重置密码</Button>
         <Button type="warning"
           size="small"
           style="margin-right: 5px"
           v-show="showOnLock(row)"
+          :disabled="globalButtonLoding"
           @click="toggleIsLockStatus(row)">解锁</Button>
         <Button type="error"
           size="small"
           v-show="showOnUnLock(row)"
+          :disabled="globalButtonLoding"
           @click="toggleIsLockStatus(row)">锁定</Button>
       </template>
     </Table>
@@ -141,6 +144,12 @@ export default {
   computed: {
     breadcrumbList: function() {
       return this.utils.routerUtil.initRouterTreeNameArr(this.routerPath)
+    },
+    globalScreenLoding: function() {
+      return this.$store.state.globalScreenLoding
+    },
+    globalButtonLoding: function() {
+      return this.$store.state.globalButtonLoding
     }
   },
   mounted: function() {
@@ -179,36 +188,44 @@ export default {
       )
     },
     toggleIsLockStatus(row) {
+      this.$store.commit('statusGlobalButtonLoding')
       this.utils.netUtil.post(
         this.$store,
         this.API_PTAH.uagUserInfoToggleIsLockStatus,
         { appId: this.paramData.data.appId, userId: row.id },
         response => {
           if (response.data.datas) {
+            this.$store.commit('statusGlobalButtonLoding')
             this.$Message.success('提交成功!')
             this.getdata()
           }
+        },
+        () => {
+          this.$store.commit('statusGlobalButtonLoding')
         }
       )
     },
     resetPassword(row) {
+      this.$store.commit('statusGlobalButtonLoding')
       this.utils.netUtil.post(
         this.$store,
         this.API_PTAH.uagUserInfoRestPassword,
         { appId: this.paramData.data.appId, userId: row.id },
         response => {
           if (response.data.datas) {
+            this.$store.commit('statusGlobalButtonLoding')
             this.$Message.success('密码已重置为123456')
             this.getdata()
           }
+        },
+        () => {
+          this.$store.commit('statusGlobalButtonLoding')
         }
       )
     },
     goEditor(row) {
       this.$router.push({
-        path: `/uag-userinfo-list/uag-userinfo-editor/${
-          this.paramData.data.appId
-        }/${row.id}`
+        path: `/uag-userinfo-list/uag-userinfo-editor/${this.paramData.data.appId}/${row.id}`
       })
     },
     handleReset() {

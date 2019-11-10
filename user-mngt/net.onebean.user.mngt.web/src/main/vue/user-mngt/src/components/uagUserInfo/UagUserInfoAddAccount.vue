@@ -40,6 +40,7 @@
 
           <FormItem>
             <Button type="primary"
+              :disabled="globalButtonLoding"
               @click="handleSubmit('uagUserInfoFrom')">提交</Button>
             <Button @click="handleReset('uagUserInfoFrom')"
               style="margin-left: 8px">重置</Button>
@@ -96,6 +97,12 @@ export default {
   computed: {
     breadcrumbList: function() {
       return this.utils.routerUtil.initRouterTreeNameArr(this.routerPath)
+    },
+    globalScreenLoding: function() {
+      return this.$store.state.globalScreenLoding
+    },
+    globalButtonLoding: function() {
+      return this.$store.state.globalButtonLoding
     }
   },
   methods: {
@@ -112,13 +119,19 @@ export default {
       this.$refs[name].resetFields()
     },
     commitData() {
-      this.utils.netUtil.post(this.$store,
+      this.$store.commit('statusGlobalButtonLoding')
+      this.utils.netUtil.post(
+        this.$store,
         this.API_PTAH.uagUserInfoAddAccount,
         this.uagUserInfoFrom,
         () => {
+          this.$store.commit('statusGlobalButtonLoding')
           this.$Message.success('提交成功!')
           this.$store.commit('setUserInfoListAppId', this.uagUserInfoFrom.appId)
           this.$router.push('/uag-userinfo-list/')
+        },
+        () => {
+          this.$store.commit('statusGlobalButtonLoding')
         }
       )
     }

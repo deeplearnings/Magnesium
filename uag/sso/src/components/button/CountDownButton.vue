@@ -48,7 +48,7 @@
 
 <template>
   <button class="count-down-button"
-    :disabled="countDownButtonDisabled"
+    :disabled="globalButtonLoding"
     type="button">{{content}}
   </button>
 </template>
@@ -56,24 +56,27 @@
 <script>
 export default {
   props: ['countDown', 'showText', 'reShowText'],
-  data() {  
+  data() {
     return {
       content: this.showText,
       cg: this.countDown,
-      countDownButtonDisabled: false
     }
   },
-  computed: {},
+  computed: {
+    globalButtonLoding: function() {
+      return this.$store.state.globalButtonLoding
+    }
+  },
   methods: {
     changeCountNumber() {
-      this.countDownButtonDisabled = 'disabled'
+      this.$store.commit('statusGlobalButtonLoding')
       const interval = setInterval(() => {
         if (this.cg > -1) {
           this.content = this.cg
           this.cg--
         } else {
+          this.$store.commit('statusGlobalButtonLoding')
           this.content = this.reShowText
-          this.countDownButtonDisabled = false
           this.cg = this.countDown
           clearInterval(interval)
         }

@@ -47,11 +47,13 @@ public class SsoLoginFilter implements Filter {
     private static String SSO_UAG_DEVICE_TOKEN_URL;
 
     static {
-        SSO_UAG_DEVICE_TOKEN_URL = PropUtil.getInstance().getConfig("sso.uag.device.token.url", PropUtil.PUBLIC_CONF_SSO);
-        SSO_BASE_OAUTH_URL = PropUtil.getInstance().getConfig("sso.base.oauth.url", PropUtil.PUBLIC_CONF_SSO);
+        String SSO_UAG_ACCESS_SCHEME = PropUtil.getInstance().getConfig("sso.uag.access.scheme", PropUtil.PUBLIC_CONF_SSO);
+        String SSO_UAG_ACCESS_HOST = PropUtil.getInstance().getConfig("sso.uag.access.host", PropUtil.PUBLIC_CONF_SSO);
         SSO_UAG_APP_ID = PropUtil.getInstance().getConfig("sso.uag.app.id", PropUtil.PUBLIC_CONF_SSO);
         SSO_UAG_SECRET = PropUtil.getInstance().getConfig("sso.uag.secret", PropUtil.PUBLIC_CONF_SSO);
-        SSO_UAG_ACCESS_TOKEN_URL = PropUtil.getInstance().getConfig("sso.uag.access.token.url", PropUtil.PUBLIC_CONF_SSO);
+        SSO_BASE_OAUTH_URL = SSO_UAG_ACCESS_SCHEME +"://"+ SSO_UAG_ACCESS_HOST +"/sso/index.html";
+        SSO_UAG_DEVICE_TOKEN_URL = SSO_UAG_ACCESS_SCHEME +"://"+ SSO_UAG_ACCESS_HOST +"/auth/initializeDevice";
+        SSO_UAG_ACCESS_TOKEN_URL = SSO_UAG_ACCESS_SCHEME +"://"+ SSO_UAG_ACCESS_HOST +"/auth/getAccessToken";
     }
 
     @Autowired

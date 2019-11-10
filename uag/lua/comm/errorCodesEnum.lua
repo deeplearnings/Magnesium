@@ -1,6 +1,6 @@
 --  错误码定义
 --  @author 0neBean
---  1-4位 1201 代表 onebean-uag
+--  1-4位 1201 代表 uag
 --  异常类型：5～6位，标识数据库、接口、缓存、权限等
 -- 	01-参数异常，参数有效性校验错误，在接口的response 的msg中请将校验有问题的参数返回给调用方；
 -- 	02-数据库异常，操作数据库异常，log的message中要有sql、参数信息，sql如果能在堆栈中体现，可以不放在message中；
@@ -35,6 +35,7 @@ errorCodesEnum.invalid_staticToken = "1201040004";
 errorCodesEnum.unlogin_request = "1201040005";
 errorCodesEnum.invalid_account = "1201040006";
 errorCodesEnum.invalid_host = "1201040007";
+errorCodesEnum.deny_ip_access = "1201040008";
 --[[05]]
 errorCodesEnum.invalid_api_address = "1201050001";
 errorCodesEnum.app_unusable = "1201050002";

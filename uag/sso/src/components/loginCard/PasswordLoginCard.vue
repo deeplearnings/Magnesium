@@ -44,8 +44,8 @@
 
           <FormItem>
             <Button type="success"
-              :disabled="commitButtonDisabled"
               long
+              :disabled="globalLoginLoding"
               @click="handleSubmit('passwordLoginFrom')">账号密码登录</Button>
           </FormItem>
         </Form>
@@ -60,7 +60,6 @@ export default {
   name: 'SmsCodeLoginCard',
   data() {
     return {
-      commitButtonDisabled: false,
       uagAppId: this.$route.query.uagAppId,
       uagDeviceToken: this.$route.query.uagDeviceToken,
       uagAccessToken: this.$route.query.uagAccessToken,
@@ -93,18 +92,23 @@ export default {
   mounted: function() {
     this.checkSsoParam()
   },
+  computed: {
+    globalLoginLoding: function() {
+      return this.$store.state.globalLoginLoding
+    }
+  },
   methods: {
     checkSsoParam: function() {
       if (
         typeof this.uagAppId === 'undefined' ||
-        typeof this.uagAccessToken === 'undefined'||
-        typeof this.uagDeviceToken === 'undefined' 
+        typeof this.uagAccessToken === 'undefined' ||
+        typeof this.uagDeviceToken === 'undefined'
       ) {
         this.$router.push('/err')
       }
     },
     doLogin: function() {
-      this.commitButtonDisabled = 'disabled'
+      this.$store.commit('statusGlobalLoginLoding')
       this.utils.netUtil.postWithAccessToken(
         this.uagAppId,
         this.uagAccessToken,
@@ -114,13 +118,14 @@ export default {
           password: this.passwordLoginFrom.password
         },
         resp => {
+          this.$store.commit('statusGlobalLoginLoding')
           if (resp.data.datas.loginStatus === '1') {
             const oauthBaseUrl = resp.data.datas.oauthBaseUrl
             window.location.href = `${oauthBaseUrl}?uagDeviceToken=${this.uagDeviceToken}`
           }
         },
         () => {
-          this.commitButtonDisabled = false
+          this.$store.commit('statusGlobalLoginLoding')
         }
       )
     },

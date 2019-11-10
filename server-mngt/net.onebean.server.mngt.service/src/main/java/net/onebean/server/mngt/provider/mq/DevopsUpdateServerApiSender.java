@@ -16,11 +16,11 @@ public class DevopsUpdateServerApiSender {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-    public Boolean send(){
-        this.rabbitTemplate.convertAndSend(MqQueueNameEnum.DEVOPS_UPDATE_SERVER_OR_API.getName(),"sync");
+    public Boolean send() {
+        LOGGER.info("send app info sync mq");
+        this.rabbitTemplate.convertAndSend(MqQueueNameEnum.DEVOPS_UPDATE_SERVER_OR_API.getName(), "sync");
         return true;
     }
-
 
 
 }

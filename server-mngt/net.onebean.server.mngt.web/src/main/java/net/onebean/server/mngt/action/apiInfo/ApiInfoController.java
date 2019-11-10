@@ -9,6 +9,9 @@ import net.onebean.core.base.BaseResponse;
 import net.onebean.core.error.BusinessException;
 import net.onebean.core.extend.Sort;
 import net.onebean.core.query.Pagination;
+import net.onebean.server.mngt.vo.AppApiRelationshipReq;
+import net.onebean.server.mngt.vo.AppApiRelationshipResp;
+import net.onebean.server.mngt.vo.FindApiByAppIdReq;
 import net.onebean.server.mngt.common.ErrorCodesEnum;
 import net.onebean.server.mngt.model.ApiInfo;
 import net.onebean.server.mngt.service.ApiInfoService;
@@ -178,6 +181,55 @@ public class ApiInfoController {
     }
 
 
+    @SuppressWarnings("unchecked")
+    @PostMapping(value = "/findApiByAppId",produces = {"application/json"},consumes = {"application/json"})
+    public BaseResponse<AppApiRelationshipResp> findApiByAppId(@RequestBody @Validated FindApiByAppIdReq request, BindingResult result){
+        logger.info("ApiInfoCloudController findApiByAppId method access"+ DateUtils.getNowyyyy_MM_dd_HH_mm_ss());
+        BaseResponse<AppApiRelationshipResp> response = new BaseResponse<>();
+        try {
+            if (result.hasErrors()) {
+                response.setErrCode(ErrorCodesEnum.REQUEST_PARAM_ERROR.code());
+                response.setErrMsg(result.getAllErrors().get(0).getDefaultMessage());
+                return response;
+            }
+            logger.debug("ApiInfoCloudController findApiByAppId method request = "+ JSON.toJSONString(request, SerializerFeature.WriteMapNullValue));
+            response = BaseResponse.ok(apiInfoService.findApiByAppId(request));
+        } catch (BusinessException e) {
+            response.setErrCode(e.getCode());
+            response.setErrMsg(e.getMsg());
+            logger.info("ApiInfoCloudController findApiByAppId method BusinessException ex = ", e);
+        } catch (Exception e) {
+            response.setErrCode(ErrorCodesEnum.OTHER.code());
+            response.setErrMsg(ErrorCodesEnum.OTHER.msg());
+            logger.error("ApiInfoCloudController findApiByAppId method catch Exception e = ",e);
+        }
+        return response;
+    }
+
+    @SuppressWarnings("unchecked")
+    @PostMapping(value = "/findAppApiRelationshipByServerIdAndAppId",produces = {"application/json"},consumes = {"application/json"})
+    public BaseResponse<AppApiRelationshipResp> findAppApiRelationshipByServerIdAndAppId(@RequestBody @Validated AppApiRelationshipReq request, BindingResult result){
+        logger.info("ApiInfoCloudController findAppApiRelationshipByServerIdAndAppId method access"+ DateUtils.getNowyyyy_MM_dd_HH_mm_ss());
+        BaseResponse<AppApiRelationshipResp> response = new BaseResponse<>();
+        try {
+            if (result.hasErrors()) {
+                response.setErrCode(ErrorCodesEnum.REQUEST_PARAM_ERROR.code());
+                response.setErrMsg(result.getAllErrors().get(0).getDefaultMessage());
+                return response;
+            }
+            logger.debug("ApiInfoCloudController findAppApiRelationshipByServerIdAndAppId method request = "+ JSON.toJSONString(request, SerializerFeature.WriteMapNullValue));
+            response = BaseResponse.ok(apiInfoService.findAppApiRelationshipByServerIdAndAppId(request));
+        } catch (BusinessException e) {
+            response.setErrCode(e.getCode());
+            response.setErrMsg(e.getMsg());
+            logger.info("ApiInfoCloudController findAppApiRelationshipByServerIdAndAppId method BusinessException ex = ", e);
+        } catch (Exception e) {
+            response.setErrCode(ErrorCodesEnum.OTHER.code());
+            response.setErrMsg(ErrorCodesEnum.OTHER.msg());
+            logger.error("ApiInfoCloudController findAppApiRelationshipByServerIdAndAppId method catch Exception e = ",e);
+        }
+        return response;
+    }
 
 
 }

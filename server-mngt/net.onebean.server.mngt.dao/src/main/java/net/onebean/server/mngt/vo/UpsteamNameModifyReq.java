@@ -15,6 +15,18 @@ public class UpsteamNameModifyReq {
         this.id = id;
     }
 
+
+    /**
+     * 部署类型 0:物理地址部署 1:kubernetes部署
+     */
+    private String deployType;
+    public String getDeployType(){
+        return this.deployType;
+    }
+    public void setDeployType(String deployType){
+        this.deployType = deployType;
+    }
+
     /**
      * 节点名称
      */

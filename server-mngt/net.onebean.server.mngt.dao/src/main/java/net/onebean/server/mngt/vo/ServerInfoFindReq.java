@@ -1,9 +1,7 @@
 package net.onebean.server.mngt.vo;
 
-import net.onebean.core.extend.FiledName;
 import net.onebean.core.model.BaseModel;
 import net.onebean.core.model.InterfaceBaseModel;
-import org.hibernate.validator.constraints.NotEmpty;
 
 /**
 * @author 0neBean
@@ -25,27 +23,16 @@ public class ServerInfoFindReq extends BaseModel implements InterfaceBaseModel {
         }
 
 
-        /**
-        * 部署类型 0:物理地址部署 1:marathon部署
-        */
-        private String deployType;
-        public String getDeployType(){
-            return this.deployType;
-        }
-        public void setDeployType(String deployType){
-            this.deployType = deployType;
-        }
-
 
         /**
          * 访问地址
          */
-        private String hostPath;
-        public String getHostPath(){
-            return this.hostPath;
+        private String upsteamNodeName;
+        public String getUpsteamNodeName() {
+            return upsteamNodeName;
         }
-        public void setHostPath(String hostPath){
-            this.hostPath = hostPath;
+        public void setUpsteamNodeName(String upsteamNodeName) {
+            this.upsteamNodeName = upsteamNodeName;
         }
 
 

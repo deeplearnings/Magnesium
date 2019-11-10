@@ -1,19 +1,27 @@
 <template>
+
   <Menu mode="horizontal"
     v-if="isShowBar"
     theme="light"
     :active-name="this.utils.routerUtil.initRouterNavBarActiveStatus(this.$route.path)">
+    <router-link to="/app-info-list"
+      replace>
+      <MenuItem name="/app-info-list">
+      <Icon type="ios-construct" />
+      应用管理
+      </MenuItem>
+    </router-link>
     <router-link to="/server-info-list"
       replace>
       <MenuItem name="/server-info-list">
       <Icon type="md-analytics" /> 服务管理
       </MenuItem>
     </router-link>
-    <router-link to="/nginx-node-info-list"
+    <router-link to="/server-machine-node-info-list"
       replace>
-      <MenuItem name="/nginx-node-info-list">
+      <MenuItem name="/server-machine-node-info-list">
       <Icon type="ios-aperture" />
-      网关节点管理
+      服务器节点管理
       </MenuItem>
     </router-link>
     <router-link to="/upsteam-node-info-list"
@@ -33,8 +41,7 @@ export default {
     }
   },
   data() {
-    return {
-    }
+    return {}
   }
 }
 </script>
