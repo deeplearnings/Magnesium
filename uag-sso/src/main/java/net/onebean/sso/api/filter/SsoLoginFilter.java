@@ -45,12 +45,13 @@ public class SsoLoginFilter implements Filter {
     private static String SSO_UAG_SECRET;
     private static String SSO_UAG_ACCESS_TOKEN_URL;
     private static String SSO_UAG_DEVICE_TOKEN_URL;
+    private static String SSO_UAG_ACCESS_SCHEME;
 
     static {
-        String SSO_UAG_ACCESS_SCHEME = PropUtil.getInstance().getConfig("sso.uag.access.scheme", PropUtil.PUBLIC_CONF_SSO);
         String SSO_UAG_ACCESS_HOST = PropUtil.getInstance().getConfig("sso.uag.access.host", PropUtil.PUBLIC_CONF_SSO);
         SSO_UAG_APP_ID = PropUtil.getInstance().getConfig("sso.uag.app.id", PropUtil.PUBLIC_CONF_SSO);
         SSO_UAG_SECRET = PropUtil.getInstance().getConfig("sso.uag.secret", PropUtil.PUBLIC_CONF_SSO);
+        SSO_UAG_ACCESS_SCHEME = PropUtil.getInstance().getConfig("sso.uag.access.scheme", PropUtil.PUBLIC_CONF_SSO);
         SSO_BASE_OAUTH_URL = SSO_UAG_ACCESS_SCHEME +"://"+ SSO_UAG_ACCESS_HOST +"/sso/index.html";
         SSO_UAG_DEVICE_TOKEN_URL = SSO_UAG_ACCESS_SCHEME +"://"+ SSO_UAG_ACCESS_HOST +"/auth/initializeDevice";
         SSO_UAG_ACCESS_TOKEN_URL = SSO_UAG_ACCESS_SCHEME +"://"+ SSO_UAG_ACCESS_HOST +"/auth/getAccessToken";
@@ -96,6 +97,7 @@ public class SsoLoginFilter implements Filter {
         /*如果两个deviceToken 都为空 铁定是没登录的url*/
         if (StringUtils.isEmpty(uagDeviceTokenFromReqParam) && StringUtils.isEmpty(uagDeviceTokenFromSession)) {
             /*未登录*/
+            LOGGER.info("will sendRedirect to = "+finalSsoUrl);
             response.sendRedirect(finalSsoUrl);
         } else if (StringUtils.isNotEmpty(uagDeviceTokenFromReqParam) || StringUtils.isNotEmpty(uagDeviceTokenFromSession)) {
             /*登录后获取到了参数里的deviceToken或session里已有deviceToken 都需要校验其有效性*/
@@ -126,9 +128,11 @@ public class SsoLoginFilter implements Filter {
                 loginSessionInfo.setUagDeviceToken(req.getDeviceToken());
                 session.setAttribute(ConstantEnum.UAG_SSO_LOGIN_INFO.getName(), JSONUtil.toJson(loginSessionInfo));
                 if (StringUtils.isNotEmpty(uagDeviceTokenFromReqParam)) {
-                    response.sendRedirect(request.getRequestURI());
+                    LOGGER.info("will sendRedirect to = "+request.getScheme()+"://"+request.getServerName()+request.getRequestURI());
+                    response.sendRedirect(SSO_UAG_ACCESS_SCHEME+"://"+request.getServerName()+request.getRequestURI());
                 }
             } else {
+                LOGGER.info("will sendRedirect to = "+finalSsoUrl);
                 /*如果当前登录失效 重定向到登录页面*/
                 response.sendRedirect(finalSsoUrl);
             }
