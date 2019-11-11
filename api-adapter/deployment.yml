@@ -29,9 +29,9 @@ spec:
           lifecycle:
             postStart:
               httpGet:
-                host: uag.onebean.net
-                path: devops/addNode?nodeName=api-adapter&currentVersion=latest&nodeNamespace=onebean-func
-                port: 80
+                host: uag-host
+                path: devops/addNode?nodeName=server-mngt&currentVersion=latest&nodeNamespace=onebean-func
+                port: uag-port
                 scheme: HTTP
       imagePullSecrets:
         - name: secret-harbor-auth

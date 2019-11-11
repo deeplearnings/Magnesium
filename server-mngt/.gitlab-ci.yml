@@ -53,6 +53,14 @@ k8s-deploy_dev:
     - test='s/kubernetes_version/temp-str/g'
     - KUBERNETES_VERSION_REGULAR=${test//'temp-str'/$KUBERNETES_VERSION}
     - sed -i $KUBERNETES_VERSION_REGULAR ./deployment.yml
+    - UAG_HOST=${UAG_HOST}
+    - test='s/uag-host/temp-str/g'
+    - UAG_HOST=${test//'temp-str'/$UAG_HOST}
+    - sed -i $UAG_HOST ./deployment.yml
+    - UAG_PORT=${UAG_PORT}
+    - test='s/uag-port/temp-str/g'
+    - UAG_PORT=${test//'temp-str'/$UAG_PORT}
+    - sed -i $UAG_PORT ./deployment.yml
     - DEFAULT_VM_ARGS=${DEFAULT_VM_ARGS}
     - test='s/default_vm_args/temp-str/g'
     - DEFAULT_VM_ARGS=${test//'temp-str'/$DEFAULT_VM_ARGS}

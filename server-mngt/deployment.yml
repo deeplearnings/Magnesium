@@ -27,11 +27,11 @@ spec:
           ports:
             - containerPort: 8080
           lifecycle:
-           postStart:
-             httpGet:
-               host: uag.onebean.net
-               path: devops/addNode?nodeName=server-mngt&currentVersion=latest&nodeNamespace=onebean-func
-               port: 80
-               scheme: HTTP
+            postStart:
+              httpGet:
+                host: uag-host
+                path: devops/addNode?nodeName=server-mngt&currentVersion=latest&nodeNamespace=onebean-func
+                port: uag-port
+                scheme: HTTP
       imagePullSecrets:
-            - name: secret-harbor-auth
+        - name: secret-harbor-auth
