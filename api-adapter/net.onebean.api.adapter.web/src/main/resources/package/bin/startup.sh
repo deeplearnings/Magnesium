@@ -72,7 +72,7 @@ fi
 echo "" > ${LOG_PATH}
 
 # 如果项目启动日志不存在,则创建,否则追加
-#echo "${STARTUP_LOG}" >> ${LOG_STARTUP_PATH}
+echo "${STARTUP_LOG}" >> ${LOG_STARTUP_PATH}
 
 #==========================================================================================
 # JVM Configuration
@@ -86,7 +86,13 @@ echo "" > ${LOG_PATH}
 #==========================================================================================
 
 
-JAVA_OPT=$(printf "%s" $JAVA_OPT| base64 -d)
+if [[ -z "$JAVA_OPT" ]]; then
+  JAVA_OPT="-server -Xms256m -Xmx256m -Xmn512m -XX:MetaspaceSize=64m -XX:MaxMetaspaceSize=256m"
+  JAVA_OPT="${JAVA_OPT} -XX:-OmitStackTraceInFastThrow"
+else
+  JAVA_OPT=$(printf "%s" $JAVA_OPT| base64 -d)
+fi
+
 
 
 #=======================================================
