@@ -30,9 +30,9 @@ spec:
             postStart:
               httpGet:
                 host: uag-host
-                path: devops/addNode?nodeName=server-mngt&currentVersion=latest&nodeNamespace=onebean-func
+                path: devops/addNode?nodeName=tenant-mngt&currentVersion=latest&nodeNamespace=onebean-func
                 port: uag-port
                 scheme: HTTP
       imagePullSecrets:
-        - name: secret-harbor-auth
+        - name: secret-register-auth
 

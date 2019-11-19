@@ -31,6 +31,7 @@ docker-build:
     - rm -rf ./app && mkdir ./app
     - mvn clean package -f ./pom.xml -P $env
     - tar -zxvf ./net.onebean.api.adapter.web/target/server-$env.tar.gz -C ./app
+    - cp $JAVA_HOME/jre/lib/security/cacerts ./app    
     - docker login nexus.onebean.net:5000 -u=admin -p='43118vu0r647VlfZaw3087d31U6ea1'
     - docker build -t nexus.onebean.net:5000/api-adapter:${CI_COMMIT_TAG} .
     - docker push nexus.onebean.net:5000/api-adapter:${CI_COMMIT_TAG}
@@ -70,5 +71,5 @@ k8s-deploy_dev:
     - sed -i $CI_COMMIT_TAG ./deployment.yml
     - sed -i '/hostAliases:/ r /usr/program/host/hosts.yml' ./deployment.yml
     - kubectl apply -f deployment.yml
-    - kubectl expose deployment server-mngt-deployment-${KUBERNETES_VERSION} --type=NodePort -n onebean-func
+    - kubectl expose deployment api-adapter-deployment-${KUBERNETES_VERSION} --type=NodePort -n onebean-func
     - echo "成功提交部署请求到k8s，请到k8s控制台上确认镜像是否成功部署！"

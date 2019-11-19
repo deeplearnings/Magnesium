@@ -31,6 +31,7 @@ docker-build:
     - rm -rf ./app && mkdir ./app
     - mvn clean package -f ./pom.xml -P $env
     - tar -zxvf ./net.onebean.server.mngt.web/target/server-$env.tar.gz -C ./app
+    - cp $JAVA_HOME/jre/lib/security/cacerts ./app
     - docker login nexus.onebean.net:5000 -u=admin -p='43118vu0r647VlfZaw3087d31U6ea1'
     - docker build -t nexus.onebean.net:5000/server-mngt:${CI_COMMIT_TAG} .
     - docker push nexus.onebean.net:5000/server-mngt:${CI_COMMIT_TAG}

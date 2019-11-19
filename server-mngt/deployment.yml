@@ -34,4 +34,4 @@ spec:
                 port: uag-port
                 scheme: HTTP
       imagePullSecrets:
-        - name: secret-harbor-auth
+        - name: secret-register-auth
