@@ -16,7 +16,7 @@
 [Introduction](https://0nebean.github.io/Magnesium/)
 ---
 - Magnesium 是一个以管理API和devops工具链 为核心功能的数据中台。
-
+一言蔽之 (集数据中台，开放平台，API网关，user-auth，devops，SaaS租户账号下发于一体的企业级云管控平台)
 
 - 框架特性
   - 基于[`Silicon`](https://0nebean.github.io/Silicon/)，[`VUE`](https://cn.vuejs.org/) 框架开发
